@@ -19,6 +19,7 @@ namespace PMS
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = new PMS.ViewModels.TaskViewModel();
         }
     }
 }
