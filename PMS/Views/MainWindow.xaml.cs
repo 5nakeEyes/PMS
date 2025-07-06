@@ -1,25 +1,33 @@
-﻿using System.Text;
+﻿using PMS.Models;
+using PMS.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace PMS
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new PMS.ViewModels.TaskViewModel();
+        }
+
+        private void AddTask_Click(object sender, RoutedEventArgs e)
+        {
+            // stwórz i pokaż dialog
+            var dlg = new Views.AddTaskWindow
+            {
+                Owner = this
+            };
+
+            if (dlg.ShowDialog() == true)
+            {
+                // pobierz nowy TaskModel i dodaj do kolekcji
+                var newTask = dlg.CreatedTask;
+                var vm = (TaskViewModel)DataContext;
+                vm.Tasks.Add(newTask);
+                vm.SelectedTask = newTask;
+            }
         }
     }
 }

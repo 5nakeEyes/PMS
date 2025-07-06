@@ -23,6 +23,8 @@ namespace PMS.ViewModels
                 if (_selectedTask == value) return;
                 _selectedTask = value;
                 OnPropertyChanged();
+                // wymuś przeładowanie CanExecute
+                ((RelayCommand)RemoveTaskCommand).RaiseCanExecuteChanged();
             }
         }
 

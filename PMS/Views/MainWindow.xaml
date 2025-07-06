@@ -1,70 +1,111 @@
 ﻿<Window x:Class="PMS.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:PMS.ViewModels"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Task Manager"
+        Height="500"
+        Width="800">
+
+    <Window.DataContext>
+        <vm:TaskViewModel/>
+    </Window.DataContext>
 
     <Grid Margin="10">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*" />
-            <ColumnDefinition Width="3*" />
-        </Grid.ColumnDefinitions>
+        <!-- 3 wiersze: Dodaj | nagłówki | lista -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-        <!-- Formularz dodawania nowego zadania -->
-        <StackPanel Grid.Column="0" Margin="0,0,10,0">
-            <TextBlock Text="Tytuł:" />
-            <TextBox Text="{Binding NewTitle, UpdateSourceTrigger=PropertyChanged}" />
+        <!-- 1) Przycisk Dodaj -->
+        <Button Content="Dodaj"
+            Grid.Row="0"
+            HorizontalAlignment="Left"
+            Width="100"
+            Margin="0,0,0,5"
+            Click="AddTask_Click"/>
 
-            <TextBlock Text="Opis:" Margin="0,10,0,0" />
-            <TextBox Text="{Binding NewDescription, UpdateSourceTrigger=PropertyChanged}"
-                     AcceptsReturn="True"
-                     Height="60" />
+        <!-- 2) Nagłówki kolumn -->
+        <Grid Grid.Row="1" Margin="0,0,0,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width=".5*"/>
+                <ColumnDefinition Width=".5*"/>
+                <ColumnDefinition Width=".5*"/>
+            </Grid.ColumnDefinitions>
 
-            <TextBlock Text="Termin:" Margin="0,10,0,0" />
-            <DatePicker SelectedDate="{Binding NewDueDate, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock Grid.Column="0"
+                 Text="Tytuł"
+                 FontWeight="Bold"
+                 Margin="0,0,10,0"/>
+            <TextBlock Grid.Column="1"
+                 Text="Termin"
+                 FontWeight="Bold"
+                 Margin="0,0,10,0"/>
+            <TextBlock Grid.Column="2"
+                 Text="Status"
+                 FontWeight="Bold"
+                 Margin="0,0,10,0"/>
+            <TextBlock Grid.Column="3"
+                 Text="Priorytet"
+                 FontWeight="Bold"/>
+        </Grid>
 
-            <TextBlock Text="Status:" Margin="0,10,0,0" />
-            <ComboBox ItemsSource="{Binding AllStates}"
-                      SelectedItem="{Binding NewState}" />
+        <!-- 3) Lista zadań -->
+        <ScrollViewer Grid.Row="2"
+                  VerticalScrollBarVisibility="Auto">
+            <ItemsControl ItemsSource="{Binding Tasks}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
 
-            <TextBlock Text="Priorytet:" Margin="0,10,0,0" />
-            <ComboBox ItemsSource="{Binding AllPriorities}"
-                      SelectedItem="{Binding NewPriority}" />
-
-            <Button Content="Dodaj"
-                    Command="{Binding AddTaskCommand}"
-                    Margin="0,20,0,0"
-                    Width="100" />
-        </StackPanel>
-
-        <!-- Lista istniejących zadań -->
-        <StackPanel Grid.Column="1">
-            <TextBlock Text="Zadania:" FontWeight="Bold" />
-
-            <ListBox ItemsSource="{Binding Tasks}"
-                     SelectedItem="{Binding SelectedTask}">
-                <ListBox.ItemTemplate>
+                <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
-                            <TextBlock Text="{Binding Title}" Width="100" />
-                            <TextBlock Text=" Status: " />
-                            <TextBlock Text="{Binding State}" Width="60" />
-                            <TextBlock Text=" Priorytet: " />
-                            <TextBlock Text="{Binding Priority}" Width="60" />
-                            <TextBlock Text=" Termin: " />
-                            <TextBlock Text="{Binding DueDate, StringFormat=d}" Width="80" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+                        <Border CornerRadius="5"
+                    BorderBrush="Gray"
+                    BorderThickness="1"
+                    Margin="0,0,0,5"
+                    Padding="8">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width=".5*"/>
+                                    <ColumnDefinition Width=".5*"/>
+                                    <ColumnDefinition Width=".5*"/>
+                                </Grid.ColumnDefinitions>
 
-            <Button Content="Usuń"
-                    Command="{Binding RemoveTaskCommand}"
-                    Margin="0,10,0,0"
-                    Width="100" />
-        </StackPanel>
+                                <!-- Tytuł -->
+                                <TextBlock Grid.Column="0"
+                           Text="{Binding Title}"
+                           VerticalAlignment="Center"
+                           Margin="0,0,10,0"/>
+
+                                <!-- Termin jako Label -->
+                                <TextBlock Grid.Column="1"
+                           Text="{Binding DueDate, StringFormat=d}"
+                           VerticalAlignment="Center"
+                           Margin="0,0,10,0"/>
+
+                                <!-- Status jako ComboBox -->
+                                <ComboBox Grid.Column="2"
+                          ItemsSource="{Binding DataContext.AllStates, RelativeSource={RelativeSource AncestorType=Window}}"
+                          SelectedItem="{Binding State, Mode=TwoWay}"
+                          HorizontalAlignment="Stretch"
+                          Margin="0,0,10,0"/>
+
+                                <!-- Priorytet jako Label -->
+                                <TextBlock Grid.Column="3"
+                           Text="{Binding Priority}"
+                           VerticalAlignment="Center"
+                           Margin="10,0,0,0"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
     </Grid>
 </Window>
