@@ -1,7 +1,5 @@
-﻿using PMS.Models;
-using PMS.ViewModels;
+﻿using PMS.ViewModels;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace PMS
 {
@@ -14,7 +12,7 @@ namespace PMS
 
         private void AddTask_Click(object sender, RoutedEventArgs e)
         {
-            // stwórz i pokaż dialog
+            //create and show dialogue
             var dlg = new Views.AddTaskWindow
             {
                 Owner = this
@@ -22,7 +20,7 @@ namespace PMS
 
             if (dlg.ShowDialog() == true)
             {
-                // pobierz nowy TaskModel i dodaj do kolekcji
+                // download the new TaskModel and add it to the collection
                 var newTask = dlg.CreatedTask;
                 var vm = (TaskViewModel)DataContext;
                 vm.Tasks.Add(newTask);

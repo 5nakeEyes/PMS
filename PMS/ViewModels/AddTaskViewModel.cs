@@ -1,7 +1,5 @@
-﻿using System;
+﻿using PMS.Models;
 using System.ComponentModel;
-using System.Linq;
-using PMS.Models;
 
 namespace PMS.ViewModels
 {

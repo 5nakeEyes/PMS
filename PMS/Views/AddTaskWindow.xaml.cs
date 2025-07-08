@@ -17,7 +17,7 @@ namespace PMS.Views
         private void Confirm_Click(object sender, RoutedEventArgs e)
         {
             var vm = (AddTaskViewModel)DataContext;
-            // utwórz TaskModel z danych viewmodelu
+            // create TaskModel from ViewModel data
             CreatedTask = new TaskModel(
                 title: vm.Title,
                 description: vm.Description,
