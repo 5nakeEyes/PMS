@@ -1,7 +1,9 @@
 ﻿using PMS.Helpers;
 using PMS.Models;
+using PMS.Views;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using System.Windows;
 
 namespace PMS.ViewModels
 {
@@ -14,11 +16,7 @@ namespace PMS.ViewModels
         public TaskModel? SelectedTask
         {
             get => _selectedTask;
-            set
-            {
-                if (SetProperty(ref _selectedTask, value))
-                    ((RelayCommand)RemoveTaskCommand).RaiseCanExecuteChanged();
-            }
+            set => SetProperty(ref _selectedTask, value);
         }
 
         // form fields to create a new task
@@ -64,13 +62,27 @@ namespace PMS.ViewModels
         public TaskPriority[] AllPriorities =>
             Enum.GetValues(typeof(TaskPriority)).Cast<TaskPriority>().ToArray();
 
+        public ICommand ShowAddDialogCommand { get; }
         public ICommand AddTaskCommand { get; }
-        public ICommand RemoveTaskCommand { get; }
 
         public TaskViewModel()
         {
+            ShowAddDialogCommand = new RelayCommand(OpenAddDialog);
             AddTaskCommand = new RelayCommand(AddTask, CanAddTask);
-            RemoveTaskCommand = new RelayCommand(RemoveTask, () => SelectedTask != null);
+        }
+        private void OpenAddDialog()
+        {
+            var vm = new AddTaskViewModel();
+            var win = new AddTaskWindow(vm)
+            {
+                Owner = Application.Current.MainWindow
+            };
+
+            if (win.ShowDialog() == true && vm.CreatedTask != null)
+            {
+                Tasks.Add(vm.CreatedTask);
+                SelectedTask = vm.CreatedTask;
+            }
         }
 
         private bool CanAddTask()
@@ -99,12 +111,6 @@ namespace PMS.ViewModels
             NewPriority = TaskPriority.Medium;
 
             ((RelayCommand)AddTaskCommand).RaiseCanExecuteChanged();
-        }
-
-        private void RemoveTask()
-        {
-            if (SelectedTask == null) return;
-            Tasks.Remove(SelectedTask);
         }
     }
 }

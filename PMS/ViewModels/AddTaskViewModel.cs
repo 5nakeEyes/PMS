@@ -1,9 +1,10 @@
-﻿using PMS.Models;
-using System.ComponentModel;
+﻿using PMS.Helpers;
+using PMS.Models;
+using System.Windows.Input;
 
 namespace PMS.ViewModels
 {
-    public class AddTaskViewModel : INotifyPropertyChanged
+    public class AddTaskViewModel : ViewModelBase
     {
         private string _title = string.Empty;
         private string _description = string.Empty;
@@ -11,36 +12,34 @@ namespace PMS.ViewModels
         private TaskState _state = TaskState.ToDo;
         private TaskPriority _priority = TaskPriority.Medium;
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
         public string Title
         {
             get => _title;
-            set { _title = value; OnPropertyChanged(nameof(Title)); }
+            set => SetProperty(ref _title, value);
         }
 
         public string Description
         {
             get => _description;
-            set { _description = value; OnPropertyChanged(nameof(Description)); }
+            set => SetProperty(ref _description, value);
         }
 
         public DateTime DueDate
         {
             get => _dueDate;
-            set { _dueDate = value; OnPropertyChanged(nameof(DueDate)); }
+            set => SetProperty(ref _dueDate, value);
         }
 
         public TaskState State
         {
             get => _state;
-            set { _state = value; OnPropertyChanged(nameof(State)); }
+            set => SetProperty(ref _state, value);
         }
 
         public TaskPriority Priority
         {
             get => _priority;
-            set { _priority = value; OnPropertyChanged(nameof(Priority)); }
+            set => SetProperty(ref _priority, value);
         }
 
         public TaskState[] AllStates =>
@@ -49,7 +48,30 @@ namespace PMS.ViewModels
         public TaskPriority[] AllPriorities =>
             Enum.GetValues(typeof(TaskPriority)).Cast<TaskPriority>().ToArray();
 
-        protected void OnPropertyChanged(string propName) =>
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
+        public TaskModel? CreatedTask { get; private set; }
+
+        public ICommand ConfirmCommand { get; }
+
+        public event Action<bool?>? RequestClose;
+
+        public AddTaskViewModel()
+        {
+            ConfirmCommand = new RelayCommand(OnConfirm, CanConfirm);
+        }
+
+        private bool CanConfirm() => !string.IsNullOrWhiteSpace(Title)
+                                     && DueDate >= DateTime.Now.Date;
+
+        private void OnConfirm()
+        {
+            CreatedTask = new TaskModel(
+                title: Title,
+                description: Description,
+                dueDate: DueDate,
+                state: State,
+                priority: Priority);
+
+            RequestClose?.Invoke(true);
+        }
     }
 }
