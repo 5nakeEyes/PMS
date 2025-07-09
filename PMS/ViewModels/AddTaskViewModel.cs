@@ -1,10 +1,12 @@
 ﻿using PMS.Helpers;
-using PMS.Models;
+using PMS.Core.Models;
+using System.Collections;
+using System.ComponentModel;
 using System.Windows.Input;
 
 namespace PMS.ViewModels
 {
-    public class AddTaskViewModel : ViewModelBase
+    public class AddTaskViewModel : ViewModelBase, INotifyDataErrorInfo
     {
         private string _title = string.Empty;
         private string _description = string.Empty;
@@ -12,10 +14,24 @@ namespace PMS.ViewModels
         private TaskState _state = TaskState.ToDo;
         private TaskPriority _priority = TaskPriority.Medium;
 
+        private readonly Dictionary<string, List<string>> _errors = new();
+
+        public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
+        public bool HasErrors => _errors.Any();
+        public IEnumerable GetErrors(string propertyName)
+            => propertyName is not null && _errors.ContainsKey(propertyName)
+               ? _errors[propertyName]
+               : Enumerable.Empty<string>();
+
         public string Title
         {
             get => _title;
-            set => SetProperty(ref _title, value);
+            set
+            {
+                if (SetProperty(ref _title, value))
+                    ValidateProperty(nameof(Title));
+            }
+
         }
 
         public string Description
@@ -27,7 +43,12 @@ namespace PMS.ViewModels
         public DateTime DueDate
         {
             get => _dueDate;
-            set => SetProperty(ref _dueDate, value);
+            set
+            {
+                if (SetProperty(ref _dueDate, value))
+                    ValidateProperty(nameof(DueDate));
+            }
+
         }
 
         public TaskState State
@@ -56,12 +77,33 @@ namespace PMS.ViewModels
 
         public AddTaskViewModel()
         {
-            ConfirmCommand = new RelayCommand(OnConfirm, CanConfirm);
+            ConfirmCommand = new RelayCommand(OnConfirm, () => !HasErrors);
+
+            ValidateProperty(nameof(Title));
+            ValidateProperty(nameof(DueDate));
         }
 
-        private bool CanConfirm()
-            => !string.IsNullOrWhiteSpace(Title)
-               && DueDate >= DateTime.Now.Date;
+        private void ValidateProperty(string propertyName)
+        {
+            List<string> errors = propertyName switch
+            {
+                nameof(Title) when string.IsNullOrWhiteSpace(Title) =>
+                    new List<string> { "Title is required." },
+
+                nameof(DueDate) when DueDate < DateTime.Now.Date =>
+                    new List<string> { "Due date cannot be in the past." },
+
+                _ => new List<string>()
+            };
+
+            if (errors.Any())
+                _errors[propertyName] = errors;
+            else
+                _errors.Remove(propertyName);
+
+            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+            ((RelayCommand)ConfirmCommand).RaiseCanExecuteChanged();
+        }
 
         private void OnConfirm()
         {

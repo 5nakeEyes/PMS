@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36221.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMS", "PMS\PMS.csproj", "{8C649DDC-0ACB-4243-B942-F61457354E3A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMS.DesktopApp", "PMS\PMS.DesktopApp.csproj", "{8C649DDC-0ACB-4243-B942-F61457354E3A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMS.Core", "PMS.Core\PMS.Core.csproj", "{5A2A57DF-765C-4841-81C6-3869BED93E24}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{8C649DDC-0ACB-4243-B942-F61457354E3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C649DDC-0ACB-4243-B942-F61457354E3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C649DDC-0ACB-4243-B942-F61457354E3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A2A57DF-765C-4841-81C6-3869BED93E24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A2A57DF-765C-4841-81C6-3869BED93E24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A2A57DF-765C-4841-81C6-3869BED93E24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A2A57DF-765C-4841-81C6-3869BED93E24}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

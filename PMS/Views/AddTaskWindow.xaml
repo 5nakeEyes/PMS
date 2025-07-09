@@ -5,6 +5,18 @@
         Height="360" Width="400"
         WindowStartupLocation="CenterOwner">
 
+    <!-- Styl globalny: pokaż Tooltip z błędem i czerwone obramowanie -->
+    <Window.Resources>
+        <Style TargetType="Control">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="True">
+                    <Setter Property="ToolTip"
+                  Value="{Binding (Validation.Errors)[0].ErrorContent, RelativeSource={RelativeSource Self}}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -14,32 +26,44 @@
 
         <StackPanel>
             <TextBlock Text="Tytuł:"/>
-            <TextBox Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox
+        Text="{Binding Title,
+               UpdateSourceTrigger=PropertyChanged,
+               ValidatesOnDataErrors=True,
+               NotifyOnValidationError=True}"/>
 
             <TextBlock Text="Opis:" Margin="0,10,0,0"/>
             <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
-                     AcceptsReturn="True" Height="60"/>
+               AcceptsReturn="True" Height="60"/>
 
             <TextBlock Text="Termin:" Margin="0,10,0,0"/>
-            <DatePicker SelectedDate="{Binding DueDate, UpdateSourceTrigger=PropertyChanged}"/>
+            <DatePicker
+        SelectedDate="{Binding DueDate,
+                        UpdateSourceTrigger=PropertyChanged,
+                        ValidatesOnDataErrors=True,
+                        NotifyOnValidationError=True}"/>
 
             <TextBlock Text="Status:" Margin="0,10,0,0"/>
             <ComboBox ItemsSource="{Binding AllStates}"
-                      SelectedItem="{Binding State}"/>
+                SelectedItem="{Binding State}"/>
 
             <TextBlock Text="Priorytet:" Margin="0,10,0,0"/>
             <ComboBox ItemsSource="{Binding AllPriorities}"
-                      SelectedItem="{Binding Priority}"/>
+                SelectedItem="{Binding Priority}"/>
         </StackPanel>
 
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
-
+        <StackPanel Grid.Row="2"
+                Orientation="Horizontal"
+                HorizontalAlignment="Right"
+                Margin="0,10,0,0">
             <Button Content="Zatwierdź"
               Width="80"
               Margin="0,0,10,0"
               Command="{Binding ConfirmCommand}"
-              IsDefault="True" />
-
+              IsDefault="True"/>
+            <Button Content="Anuluj"
+              Width="80"
+              IsCancel="True"/>
         </StackPanel>
     </Grid>
 </Window>

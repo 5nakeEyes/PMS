@@ -1,22 +1,27 @@
 ﻿using PMS.Helpers;
-using PMS.Models;
+using PMS.Core.Models;
+using PMS.Views;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
+
 
 namespace PMS.ViewModels
 {
     public class TaskViewModel : ViewModelBase
     {
-        public ObservableCollection<TaskModel> Tasks { get; }
-            = new ObservableCollection<TaskModel>();
+        public ObservableCollection<TaskItemViewModel> Tasks { get; } 
+            = new ObservableCollection<TaskItemViewModel>();
 
-        private TaskModel? _selectedTask;
-        public TaskModel? SelectedTask
+        private TaskItemViewModel? _selectedTask;
+        public TaskItemViewModel? SelectedTask
         {
             get => _selectedTask;
             set => SetProperty(ref _selectedTask, value);
         }
+
+        public TaskState[] AllStates =>
+            Enum.GetValues(typeof(TaskState)).Cast<TaskState>().ToArray();
 
         public ICommand ShowAddDialogCommand { get; }
 
@@ -35,8 +40,9 @@ namespace PMS.ViewModels
 
             if (win.ShowDialog() == true && vm.CreatedTask != null)
             {
-                Tasks.Add(vm.CreatedTask);
-                SelectedTask = vm.CreatedTask;
+                var itemVm = new TaskItemViewModel(vm.CreatedTask);
+                Tasks.Add(itemVm);
+                SelectedTask = itemVm;
             }
         }
     }
