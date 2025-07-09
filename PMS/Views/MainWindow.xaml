@@ -54,11 +54,6 @@
         <ScrollViewer Grid.Row="2"
                   VerticalScrollBarVisibility="Auto">
             <ItemsControl ItemsSource="{Binding Tasks}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
 
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>

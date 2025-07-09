@@ -1,7 +1,6 @@
 ﻿<Window x:Class="PMS.Views.AddTaskWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="clr-namespace:PMS.ViewModels"
         Title="Dodaj Zadanie"
         Height="360" Width="400"
         WindowStartupLocation="CenterOwner">

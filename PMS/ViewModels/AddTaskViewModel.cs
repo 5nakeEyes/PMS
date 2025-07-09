@@ -59,8 +59,9 @@ namespace PMS.ViewModels
             ConfirmCommand = new RelayCommand(OnConfirm, CanConfirm);
         }
 
-        private bool CanConfirm() => !string.IsNullOrWhiteSpace(Title)
-                                     && DueDate >= DateTime.Now.Date;
+        private bool CanConfirm()
+            => !string.IsNullOrWhiteSpace(Title)
+               && DueDate >= DateTime.Now.Date;
 
         private void OnConfirm()
         {
