@@ -24,6 +24,8 @@ namespace PMS.ViewModels
             Enum.GetValues(typeof(TaskState)).Cast<TaskState>().ToArray();
 
         public ICommand ShowAddDialogCommand { get; }
+        public ICommand RemoveTaskByIdCommand { get; }  // nowa komenda
+
 
         public TaskViewModel()
         {
@@ -33,17 +35,30 @@ namespace PMS.ViewModels
         private void OpenAddDialog()
         {
             var vm = new AddTaskViewModel();
-            var win = new AddTaskWindow(vm)
-            {
-                Owner = Application.Current.MainWindow
-            };
+            var win = new AddTaskWindow(vm) { Owner = Application.Current.MainWindow };
 
             if (win.ShowDialog() == true && vm.CreatedTask != null)
             {
-                var itemVm = new TaskItemViewModel(vm.CreatedTask);
+                // przekazujemy TaskItemViewModelowi referencję do RemoveById
+                var itemVm = new TaskItemViewModel(vm.CreatedTask, RemoveById);
                 Tasks.Add(itemVm);
-                SelectedTask = itemVm;
             }
+        }
+
+        private void RemoveById(Guid id)
+        {
+            var item = Tasks.FirstOrDefault(t => t.Id == id);
+            if (item == null) return;
+
+            var res = MessageBox.Show(
+                $"Czy na pewno usunąć zadanie “{item.Title}”?",
+                "Potwierdź",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (res != MessageBoxResult.Yes) return;
+
+            Tasks.Remove(item);
         }
     }
 }

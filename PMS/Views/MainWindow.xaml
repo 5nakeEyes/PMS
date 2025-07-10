@@ -27,27 +27,46 @@
         <!-- 2) Nagłówki kolumn -->
         <Grid Grid.Row="1" Margin="0,0,0,5">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="1.5*"/>
+                <!-- Tytuł -->
                 <ColumnDefinition Width=".5*"/>
+                <!-- Termin -->
                 <ColumnDefinition Width=".5*"/>
+                <!-- Status -->
                 <ColumnDefinition Width=".5*"/>
+                <!-- Priorytet -->
+                <ColumnDefinition Width=".5*"/>
+                <!-- Akcje -->
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Column="0"
-                 Text="Tytuł"
-                 FontWeight="Bold"
-                 Margin="0,0,10,0"/>
+             Text="Tytuł"
+             FontWeight="Bold"
+             Margin="10,0,10,0"/>
+
             <TextBlock Grid.Column="1"
-                 Text="Termin"
-                 FontWeight="Bold"
-                 Margin="0,0,10,0"/>
+             Text="Termin"
+             HorizontalAlignment="Center"
+             FontWeight="Bold"
+             Margin="0,0,10,0"/>
+
             <TextBlock Grid.Column="2"
-                 Text="Status"
-                 FontWeight="Bold"
-                 Margin="0,0,10,0"/>
+             Text="Status"
+             HorizontalAlignment="Center"
+             FontWeight="Bold"
+             Margin="0,0,10,0"/>
+
             <TextBlock Grid.Column="3"
-                 Text="Priorytet"
-                 FontWeight="Bold"/>
+             Text="Priorytet"
+             HorizontalAlignment="Center"
+             FontWeight="Bold"
+             Margin="0,0,10,0"/>
+
+            <TextBlock Grid.Column="4"
+             Text="Akcje"
+             HorizontalAlignment="Center"
+             FontWeight="Bold"
+             Margin="0,0,10,0"/>
         </Grid>
 
         <!-- 3) Lista zadań -->
@@ -64,7 +83,8 @@
                     Padding="8">
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="1.5*"/>
+                                    <ColumnDefinition Width=".5*"/>
                                     <ColumnDefinition Width=".5*"/>
                                     <ColumnDefinition Width=".5*"/>
                                     <ColumnDefinition Width=".5*"/>
@@ -80,20 +100,28 @@
                                 <TextBlock Grid.Column="1"
                            Text="{Binding DueDate, StringFormat=d}"
                            VerticalAlignment="Center"
-                           Margin="0,0,10,0"/>
+                           HorizontalAlignment="Center"/>
 
                                 <!-- Status jako ComboBox -->
                                 <ComboBox Grid.Column="2"
                           ItemsSource="{Binding DataContext.AllStates, RelativeSource={RelativeSource AncestorType=Window}}"
                           SelectedItem="{Binding State, Mode=TwoWay}"
-                          HorizontalAlignment="Stretch"
-                          Margin="0,0,10,0"/>
+                          HorizontalContentAlignment="Center"
+                          HorizontalAlignment="Stretch"/>
 
                                 <!-- Priorytet jako Label -->
                                 <TextBlock Grid.Column="3"
                            Text="{Binding Priority}"
                            VerticalAlignment="Center"
-                           Margin="10,0,0,0"/>
+                           HorizontalAlignment="Center"/>
+
+                                <!-- Przycisk Usuń -->
+                                <Button Grid.Column="4"
+                           Content="Usuń"
+                           Command="{Binding RemoveCommand}"
+                           ToolTip="Usuń zadanie"
+                           HorizontalAlignment="Stretch"/>
+
                             </Grid>
                         </Border>
                     </DataTemplate>
