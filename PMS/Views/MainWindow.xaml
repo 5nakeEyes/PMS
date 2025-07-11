@@ -115,13 +115,27 @@
                            VerticalAlignment="Center"
                            HorizontalAlignment="Center"/>
 
-                                <!-- Przycisk Usuń -->
-                                <Button Grid.Column="4"
-                           Content="Usuń"
-                           Command="{Binding RemoveCommand}"
-                           ToolTip="Usuń zadanie"
-                           HorizontalAlignment="Stretch"/>
-
+                                <StackPanel Grid.Column="4" Orientation="Vertical" HorizontalAlignment="Stretch">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="0.5*"/>
+                                            <ColumnDefinition Width="0.5*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <!-- Przycisk Edytuj -->
+                                        <Button Content="Edytuj" 
+                                        Grid.Column="0"
+                                        Command="{Binding EditCommand}"
+                                        ToolTip="Edytuj zadanie"
+                                        Margin="0,0,1,0"
+                                        HorizontalAlignment="Stretch"/>
+                                        <!-- Przycisk Usuń -->
+                                        <Button Content="Usuń" 
+                                        Grid.Column="1"
+                                        Command="{Binding RemoveCommand}"
+                                        ToolTip="Usuń zadanie"
+                                        HorizontalAlignment="Stretch"/>
+                                    </Grid>
+                                </StackPanel>
                             </Grid>
                         </Border>
                     </DataTemplate>

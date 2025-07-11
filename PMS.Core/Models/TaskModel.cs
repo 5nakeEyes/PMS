@@ -3,11 +3,11 @@
     public class TaskModel
     {
         public Guid Id { get; }
-        public string Title { get; }
-        public string Description { get; }
-        public DateTime DueDate { get; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public DateTime DueDate { get; set; }
         public TaskState State { get; set; }
-        public TaskPriority Priority { get; }
+        public TaskPriority Priority { get; set; }
 
         public TaskModel(string title, string description, DateTime dueDate, TaskState state, TaskPriority priority)
         {

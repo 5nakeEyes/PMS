@@ -1,6 +1,7 @@
-﻿using PMS.Core.Models;
-using PMS.Helpers;
+﻿using System;
 using System.Windows.Input;
+using PMS.Core.Models;
+using PMS.Helpers;
 
 namespace PMS.ViewModels
 {
@@ -8,20 +9,61 @@ namespace PMS.ViewModels
     {
         private readonly TaskModel _model;
         private readonly Action<Guid> _removeByIdCallback;
+        private readonly Action<TaskItemViewModel> _editCallback;
 
-        public TaskItemViewModel(TaskModel model, Action<Guid> removeByIdCallback)
+        public TaskItemViewModel(
+            TaskModel model,
+            Action<Guid> removeByIdCallback,
+            Action<TaskItemViewModel> editCallback)
         {
             _model = model;
             _removeByIdCallback = removeByIdCallback;
+            _editCallback = editCallback;
 
             RemoveCommand = new RelayCommand(() => _removeByIdCallback(Id));
+            EditCommand = new RelayCommand(() => _editCallback(this));
         }
 
         public Guid Id => _model.Id;
-        public string Title => _model.Title;
-        public string Description => _model.Description;
-        public DateTime DueDate => _model.DueDate;
-        public TaskPriority Priority => _model.Priority;
+
+        public string Title
+        {
+            get => _model.Title;
+            set
+            {
+                if (_model.Title != value)
+                {
+                    _model.Title = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string Description
+        {
+            get => _model.Description;
+            set
+            {
+                if (_model.Description != value)
+                {
+                    _model.Description = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public DateTime DueDate
+        {
+            get => _model.DueDate;
+            set
+            {
+                if (_model.DueDate != value)
+                {
+                    _model.DueDate = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         public TaskState State
         {
@@ -36,8 +78,20 @@ namespace PMS.ViewModels
             }
         }
 
+        public TaskPriority Priority
+        {
+            get => _model.Priority;
+            set
+            {
+                if (_model.Priority != value)
+                {
+                    _model.Priority = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public ICommand RemoveCommand { get; }
+        public ICommand EditCommand { get; }
     }
 }
-
-

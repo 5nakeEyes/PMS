@@ -1,31 +1,23 @@
-﻿using PMS.Helpers;
-using PMS.Core.Models;
-using PMS.Views;
+﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-
+using PMS.Core.Models;
+using PMS.Helpers;
+using PMS.Views;
 
 namespace PMS.ViewModels
 {
     public class TaskViewModel : ViewModelBase
     {
-        public ObservableCollection<TaskItemViewModel> Tasks { get; } 
+        public ObservableCollection<TaskItemViewModel> Tasks { get; }
             = new ObservableCollection<TaskItemViewModel>();
-
-        private TaskItemViewModel? _selectedTask;
-        public TaskItemViewModel? SelectedTask
-        {
-            get => _selectedTask;
-            set => SetProperty(ref _selectedTask, value);
-        }
 
         public TaskState[] AllStates =>
             Enum.GetValues(typeof(TaskState)).Cast<TaskState>().ToArray();
 
         public ICommand ShowAddDialogCommand { get; }
-        public ICommand RemoveTaskByIdCommand { get; }  // nowa komenda
-
 
         public TaskViewModel()
         {
@@ -35,13 +27,19 @@ namespace PMS.ViewModels
         private void OpenAddDialog()
         {
             var vm = new AddTaskViewModel();
-            var win = new AddTaskWindow(vm) { Owner = Application.Current.MainWindow };
+            var win = new AddTaskWindow(vm)
+            {
+                Owner = Application.Current.MainWindow
+            };
 
             if (win.ShowDialog() == true && vm.CreatedTask != null)
             {
-                // przekazujemy TaskItemViewModelowi referencję do RemoveById
-                var itemVm = new TaskItemViewModel(vm.CreatedTask, RemoveById);
-                Tasks.Add(itemVm);
+                var item = new TaskItemViewModel(
+                    vm.CreatedTask,
+                    removeByIdCallback: RemoveById,
+                    editCallback: EditTask);
+
+                Tasks.Add(item);
             }
         }
 
@@ -51,14 +49,41 @@ namespace PMS.ViewModels
             if (item == null) return;
 
             var res = MessageBox.Show(
-                $"Czy na pewno usunąć zadanie “{item.Title}”?",
-                "Potwierdź",
+                $"Czy na pewno usunąć zadanie \"{item.Title}\"?",
+                "Potwierdź usunięcie",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Warning);
 
             if (res != MessageBoxResult.Yes) return;
 
             Tasks.Remove(item);
+        }
+
+        private void EditTask(TaskItemViewModel item)
+        {
+            var editVm = new AddTaskViewModel
+            {
+                Title = item.Title,
+                Description = item.Description,
+                DueDate = item.DueDate,
+                State = item.State,
+                Priority = item.Priority
+            };
+
+            var win = new AddTaskWindow(editVm)
+            {
+                Owner = Application.Current.MainWindow,
+                Title = "Edytuj zadanie"
+            };
+
+            if (win.ShowDialog() == true && editVm.CreatedTask != null)
+            {
+                item.Title = editVm.CreatedTask.Title;
+                item.Description = editVm.CreatedTask.Description;
+                item.DueDate = editVm.CreatedTask.DueDate;
+                item.State = editVm.CreatedTask.State;
+                item.Priority = editVm.CreatedTask.Priority;
+            }
         }
     }
 }
