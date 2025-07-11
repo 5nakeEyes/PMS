@@ -1,7 +1,6 @@
-﻿using System;
-using System.Windows.Input;
-using PMS.Core.Models;
+﻿using PMS.Core.Models;
 using PMS.Helpers;
+using System.Windows.Input;
 
 namespace PMS.ViewModels
 {
@@ -23,6 +22,8 @@ namespace PMS.ViewModels
             RemoveCommand = new RelayCommand(() => _removeByIdCallback(Id));
             EditCommand = new RelayCommand(() => _editCallback(this));
         }
+
+        public TaskModel Model => _model;
 
         public Guid Id => _model.Id;
 

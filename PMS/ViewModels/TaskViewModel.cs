@@ -5,7 +5,9 @@ using System.Windows;
 using System.Windows.Input;
 using PMS.Core.Models;
 using PMS.Helpers;
+using PMS.Services;
 using PMS.Views;
+
 
 namespace PMS.ViewModels
 {
@@ -21,6 +23,14 @@ namespace PMS.ViewModels
 
         public TaskViewModel()
         {
+            var models = TaskStorageService.Load();
+            foreach (var m in models)
+                Tasks.Add(
+                    new TaskItemViewModel(
+                        m,
+                        removeByIdCallback: RemoveById,
+                        editCallback: EditTask));
+
             ShowAddDialogCommand = new RelayCommand(OpenAddDialog);
         }
 
@@ -32,15 +42,17 @@ namespace PMS.ViewModels
                 Owner = Application.Current.MainWindow
             };
 
-            if (win.ShowDialog() == true && vm.CreatedTask != null)
-            {
-                var item = new TaskItemViewModel(
-                    vm.CreatedTask,
-                    removeByIdCallback: RemoveById,
-                    editCallback: EditTask);
+            if (win.ShowDialog() != true || vm.CreatedTask == null)
+                return;
 
-                Tasks.Add(item);
-            }
+            var item = new TaskItemViewModel(
+                vm.CreatedTask,
+                RemoveById,
+                EditTask);
+
+            Tasks.Add(item);
+            SaveAll();
+
         }
 
         private void RemoveById(Guid id)
@@ -85,5 +97,11 @@ namespace PMS.ViewModels
                 item.Priority = editVm.CreatedTask.Priority;
             }
         }
+
+        private void SaveAll()
+        {
+            TaskStorageService.Save(Tasks.Select(t => t.Model));
+        }
+
     }
 }
