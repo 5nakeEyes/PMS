@@ -4,10 +4,6 @@
         xmlns:vm="clr-namespace:PMS.ViewModels"
         Title="Task Manager" Height="500" Width="800">
 
-    <Window.DataContext>
-        <vm:TaskViewModel/>
-    </Window.DataContext>
-
     <Grid Margin="10">
         <!-- 3 wiersze: Dodaj | nagłówki | lista -->
         <Grid.RowDefinitions>

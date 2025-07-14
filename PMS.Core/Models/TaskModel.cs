@@ -1,7 +1,4 @@
-﻿using System;
-using System.Text.Json.Serialization;
-
-namespace PMS.Core.Models
+﻿namespace PMS.Core.Models
 {
     public class TaskModel
     {

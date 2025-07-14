@@ -3,9 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36221.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMS.DesktopApp", "PMS\PMS.DesktopApp.csproj", "{8C649DDC-0ACB-4243-B942-F61457354E3A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMS.Ui", "PMS\PMS.Ui.csproj", "{8C649DDC-0ACB-4243-B942-F61457354E3A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMS.Core", "PMS.Core\PMS.Core.csproj", "{5A2A57DF-765C-4841-81C6-3869BED93E24}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMS.Services", "PMS.Services\PMS.Services.csproj", "{C4E6301B-D98C-410F-949E-11D0C6E6F826}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMS.Helpers", "PMS.Helpers\PMS.Helpers.csproj", "{75194A6C-4EAC-4E75-8073-E042F265FCF1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{5A2A57DF-765C-4841-81C6-3869BED93E24}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5A2A57DF-765C-4841-81C6-3869BED93E24}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5A2A57DF-765C-4841-81C6-3869BED93E24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4E6301B-D98C-410F-949E-11D0C6E6F826}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4E6301B-D98C-410F-949E-11D0C6E6F826}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4E6301B-D98C-410F-949E-11D0C6E6F826}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4E6301B-D98C-410F-949E-11D0C6E6F826}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75194A6C-4EAC-4E75-8073-E042F265FCF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75194A6C-4EAC-4E75-8073-E042F265FCF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75194A6C-4EAC-4E75-8073-E042F265FCF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75194A6C-4EAC-4E75-8073-E042F265FCF1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

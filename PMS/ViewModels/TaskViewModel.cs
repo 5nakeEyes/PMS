@@ -1,18 +1,17 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Windows;
-using System.Windows.Input;
-using PMS.Core.Models;
+﻿using PMS.Core.Models;
 using PMS.Helpers;
 using PMS.Services;
 using PMS.Views;
-
+using System.Collections.ObjectModel;
+using System.Windows;
+using System.Windows.Input;
 
 namespace PMS.ViewModels
 {
     public class TaskViewModel : ViewModelBase
     {
+        private readonly ITaskStorageService _storage;
+
         public ObservableCollection<TaskItemViewModel> Tasks { get; }
             = new ObservableCollection<TaskItemViewModel>();
 
@@ -21,18 +20,67 @@ namespace PMS.ViewModels
 
         public ICommand ShowAddDialogCommand { get; }
 
-        public TaskViewModel()
+        public TaskViewModel(ITaskStorageService storage)
         {
-            var models = TaskStorageService.Load();
-            foreach (var m in models)
-                Tasks.Add(
-                    new TaskItemViewModel(
-                        m,
-                        removeByIdCallback: RemoveById,
-                        editCallback: EditTask));
-
+            _storage = storage;
             ShowAddDialogCommand = new RelayCommand(OpenAddDialog);
+            _ = InitializeAsync();
         }
+
+        private async Task InitializeAsync()
+        {
+            var models = await _storage.LoadAsync();
+            foreach (var m in models)
+                Tasks.Add(CreateItemVm(m));
+        }
+
+        private TaskItemViewModel CreateItemVm(TaskModel model)
+            => new TaskItemViewModel(
+                   model,
+                   removeByIdCallback: async id =>
+                   {
+                       var vm = Tasks.FirstOrDefault(t => t.Id == id);
+                       if (vm == null) return;
+
+                       var res = MessageBox.Show(
+                           $"Czy na pewno usunąć zadanie \"{vm.Title}\"?",
+                           "Potwierdź usunięcie",
+                           MessageBoxButton.YesNo,
+                           MessageBoxImage.Warning);
+
+                       if (res != MessageBoxResult.Yes) return;
+
+                       Tasks.Remove(vm);
+                       await SaveAllAsync();
+                   },
+                   editCallback: async item =>
+                   {
+                       var editVm = new AddTaskViewModel
+                       {
+                           Title = item.Title,
+                           Description = item.Description,
+                           DueDate = item.DueDate,
+                           State = item.State,
+                           Priority = item.Priority
+                       };
+                       var win = new AddTaskWindow(editVm)
+                       {
+                           Owner = Application.Current.MainWindow,
+                           Title = "Edytuj zadanie"
+                       };
+
+                       if (win.ShowDialog() == true && editVm.CreatedTask != null)
+                       {
+                           var t = editVm.CreatedTask;
+                           item.Title       = t.Title;
+                           item.Description = t.Description;
+                           item.DueDate     = t.DueDate;
+                           item.State       = t.State;
+                           item.Priority    = t.Priority;
+
+                           await SaveAllAsync();
+                       }
+                   });
 
         private void OpenAddDialog()
         {
@@ -42,66 +90,18 @@ namespace PMS.ViewModels
                 Owner = Application.Current.MainWindow
             };
 
-            if (win.ShowDialog() != true || vm.CreatedTask == null)
-                return;
-
-            var item = new TaskItemViewModel(
-                vm.CreatedTask,
-                RemoveById,
-                EditTask);
-
-            Tasks.Add(item);
-            SaveAll();
-
-        }
-
-        private void RemoveById(Guid id)
-        {
-            var item = Tasks.FirstOrDefault(t => t.Id == id);
-            if (item == null) return;
-
-            var res = MessageBox.Show(
-                $"Czy na pewno usunąć zadanie \"{item.Title}\"?",
-                "Potwierdź usunięcie",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Warning);
-
-            if (res != MessageBoxResult.Yes) return;
-
-            Tasks.Remove(item);
-        }
-
-        private void EditTask(TaskItemViewModel item)
-        {
-            var editVm = new AddTaskViewModel
+            if (win.ShowDialog() == true && vm.CreatedTask != null)
             {
-                Title = item.Title,
-                Description = item.Description,
-                DueDate = item.DueDate,
-                State = item.State,
-                Priority = item.Priority
-            };
-
-            var win = new AddTaskWindow(editVm)
-            {
-                Owner = Application.Current.MainWindow,
-                Title = "Edytuj zadanie"
-            };
-
-            if (win.ShowDialog() == true && editVm.CreatedTask != null)
-            {
-                item.Title = editVm.CreatedTask.Title;
-                item.Description = editVm.CreatedTask.Description;
-                item.DueDate = editVm.CreatedTask.DueDate;
-                item.State = editVm.CreatedTask.State;
-                item.Priority = editVm.CreatedTask.Priority;
+                var item = CreateItemVm(vm.CreatedTask);
+                Tasks.Add(item);
+                _ = SaveAllAsync();
             }
         }
 
-        private void SaveAll()
+        private async Task SaveAllAsync()
         {
-            TaskStorageService.Save(Tasks.Select(t => t.Model));
+            var models = Tasks.Select(t => t.Model).ToList();
+            await _storage.SaveAsync(models);
         }
-
     }
 }

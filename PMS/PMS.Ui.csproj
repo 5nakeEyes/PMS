@@ -9,7 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\PMS.Core\PMS.Core.csproj" />
+	<ProjectReference Include="..\PMS.Services\PMS.Services.csproj" />
+	<ProjectReference Include="..\PMS.Helpers\PMS.Helpers.csproj" />
   </ItemGroup>
 
 </Project>
