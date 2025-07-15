@@ -23,7 +23,8 @@ namespace PMS.ViewModels
         public TaskViewModel(ITaskStorageService storage)
         {
             _storage = storage;
-            ShowAddDialogCommand = new RelayCommand(OpenAddDialog);
+            ShowAddDialogCommand = new AsyncRelayCommand(OpenAddDialogAsync);
+
             _ = InitializeAsync();
         }
 
@@ -72,17 +73,17 @@ namespace PMS.ViewModels
                        if (win.ShowDialog() == true && editVm.CreatedTask != null)
                        {
                            var t = editVm.CreatedTask;
-                           item.Title       = t.Title;
+                           item.Title = t.Title;
                            item.Description = t.Description;
-                           item.DueDate     = t.DueDate;
-                           item.State       = t.State;
-                           item.Priority    = t.Priority;
+                           item.DueDate = t.DueDate;
+                           item.State = t.State;
+                           item.Priority = t.Priority;
 
                            await SaveAllAsync();
                        }
                    });
 
-        private void OpenAddDialog()
+        private async Task OpenAddDialogAsync()
         {
             var vm = new AddTaskViewModel();
             var win = new AddTaskWindow(vm)
@@ -94,7 +95,7 @@ namespace PMS.ViewModels
             {
                 var item = CreateItemVm(vm.CreatedTask);
                 Tasks.Add(item);
-                _ = SaveAllAsync();
+                await SaveAllAsync();
             }
         }
 

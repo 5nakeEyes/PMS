@@ -94,7 +94,7 @@
 
                                 <!-- Termin jako Label -->
                                 <TextBlock Grid.Column="1"
-                           Text="{Binding DueDate, StringFormat=d}"
+                           Text="{Binding DueDate, StringFormat={}{0:dd.MM.yyyy}}"
                            VerticalAlignment="Center"
                            HorizontalAlignment="Center"/>
 
