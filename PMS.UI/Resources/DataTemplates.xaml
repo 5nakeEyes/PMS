@@ -1,0 +1,15 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="clr-namespace:PMS.Presentation.ViewModels;assembly=PMS.Presentation"
+    xmlns:views="clr-namespace:PMS.UI.Views">
+
+    <DataTemplate DataType="{x:Type vm:TaskItemViewModel}">
+        <views:TaskItemView />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:AddTaskViewModel}">
+        <views:AddTaskView />
+    </DataTemplate>
+
+</ResourceDictionary>

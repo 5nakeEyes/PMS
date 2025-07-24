@@ -1,0 +1,71 @@
+﻿<Window x:Class="PMS.UI.Views.AddTaskWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:PMS.Presentation.ViewModels;assembly=PMS.Presentation"
+        Title="Dodaj/Zedytuj Zadanie"
+        Height="360" Width="400"
+        WindowStartupLocation="CenterOwner">
+
+
+    <!-- Styl globalny: pokaż Tooltip z błędem i czerwone obramowanie -->
+    <Window.Resources>
+        <Style TargetType="Control">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="True">
+                    <Setter Property="ToolTip"
+                  Value="{Binding (Validation.Errors)[0].ErrorContent, RelativeSource={RelativeSource Self}}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel>
+            <TextBlock Text="Tytuł:"/>
+            <TextBox
+        Text="{Binding Title,
+               UpdateSourceTrigger=PropertyChanged,
+               ValidatesOnDataErrors=True,
+               NotifyOnValidationError=True}"/>
+
+            <TextBlock Text="Opis:" Margin="0,10,0,0"/>
+            <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+               AcceptsReturn="True" Height="60"/>
+
+            <TextBlock Text="Termin:" Margin="0,10,0,0"/>
+            <DatePicker
+        SelectedDate="{Binding DueDate,
+                        UpdateSourceTrigger=PropertyChanged,
+                        ValidatesOnDataErrors=True,
+                        NotifyOnValidationError=True}"/>
+
+            <TextBlock Text="Status:" Margin="0,10,0,0"/>
+            <ComboBox ItemsSource="{Binding AllStates}"
+                SelectedItem="{Binding State}"/>
+
+            <TextBlock Text="Priorytet:" Margin="0,10,0,0"/>
+            <ComboBox ItemsSource="{Binding AllPriorities}"
+                SelectedItem="{Binding Priority}"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2"
+                Orientation="Horizontal"
+                HorizontalAlignment="Right"
+                Margin="0,10,0,0">
+            <Button Content="Zatwierdź"
+              Width="80"
+              Margin="0,0,10,0"
+              Command="{Binding ConfirmCommand}"
+              IsDefault="True"/>
+            <Button Content="Anuluj"
+              Width="80"
+              IsCancel="True"/>
+        </StackPanel>
+    </Grid>
+</Window>
