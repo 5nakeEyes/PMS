@@ -12,35 +12,55 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>
+                <!-- Tytuł -->
                 <ColumnDefinition Width="Auto"/>
+                <!-- StartDate -->
                 <ColumnDefinition Width="Auto"/>
+                <!-- Deadline -->
                 <ColumnDefinition Width="Auto"/>
+                <!-- Status -->
                 <ColumnDefinition Width="Auto"/>
+                <!-- Priorytet -->
+                <ColumnDefinition Width="Auto"/>
+                <!-- Akcje -->
             </Grid.ColumnDefinitions>
 
+            <!-- Tytuł zadania -->
             <TextBlock Grid.Column="0"
                  Text="{Binding Title}"
                  VerticalAlignment="Center"
                  FontWeight="SemiBold"/>
 
+            <!-- Data rozpoczęcia -->
             <TextBlock Grid.Column="1"
-                 Text="{Binding DueDate, StringFormat=d}"
+                 Text="{Binding StartDate, StringFormat=d}"
                  VerticalAlignment="Center"
-                 Margin="8,0"/>
+                 Margin="8,0"
+                 ToolTip="Data rozpoczęcia"/>
 
-            <ComboBox Grid.Column="2"
+            <!-- Termin zakończenia -->
+            <TextBlock Grid.Column="2"
+                 Text="{Binding Deadline, StringFormat=d}"
+                 VerticalAlignment="Center"
+                 Margin="8,0"
+                 ToolTip="Termin zakończenia"/>
+
+            <!-- Status -->
+            <ComboBox Grid.Column="3"
                 ItemsSource="{Binding AllStates}"
                 SelectedItem="{Binding State}"
                 Width="100"
                 Margin="8,0"/>
 
-            <ComboBox Grid.Column="3"
+            <!-- Priorytet -->
+            <ComboBox Grid.Column="4"
                 ItemsSource="{Binding AllPriorities}"
                 SelectedItem="{Binding Priority}"
                 Width="100"
                 Margin="8,0"/>
 
-            <StackPanel Grid.Column="4"
+            <!-- Przycisk Edytuj / Usuń -->
+            <StackPanel Grid.Column="5"
                   Orientation="Horizontal"
                   HorizontalAlignment="Right"
                   Margin="8,0,0,0">

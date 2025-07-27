@@ -9,13 +9,14 @@ namespace PMS.Presentation.ViewModels
     {
         private readonly ITaskRepository _repo;
         private readonly IDialogService _dialogs;
-
-        // Gdy nie-null => edycja, gdy null => dodawanie
         private readonly TaskModel? _editingModel;
 
         public string Title { get => _title; set => SetProperty(ref _title, value); }
         public string Description { get => _desc; set => SetProperty(ref _desc, value); }
-        public DateTime DueDate { get => _dueDate; set => SetProperty(ref _dueDate, value); }
+
+        public DateTime StartDate { get => _startDate; set => SetProperty(ref _startDate, value); }
+        public DateTime Deadline { get => _deadline; set => SetProperty(ref _deadline, value); }
+
         public TaskState State { get => _state; set => SetProperty(ref _state, value); }
         public TaskPriority Priority { get => _priority; set => SetProperty(ref _priority, value); }
 
@@ -23,7 +24,6 @@ namespace PMS.Presentation.ViewModels
 
         public IEnumerable<TaskState> AllStates =>
             Enum.GetValues(typeof(TaskState)).Cast<TaskState>();
-
         public IEnumerable<TaskPriority> AllPriorities =>
             Enum.GetValues(typeof(TaskPriority)).Cast<TaskPriority>();
 
@@ -32,7 +32,6 @@ namespace PMS.Presentation.ViewModels
 
         public event Action<bool>? RequestClose;
 
-        // Konstruktor do nowego zadania
         public AddTaskViewModel(
             ITaskRepository repo,
             IDialogService dialogs)
@@ -40,7 +39,8 @@ namespace PMS.Presentation.ViewModels
             _repo = repo;
             _dialogs = dialogs;
 
-            DueDate = DateTime.Today;
+            StartDate = DateTime.Today;
+            Deadline = DateTime.Today;
             State = TaskState.ToDo;
             Priority = TaskPriority.Medium;
 
@@ -48,7 +48,6 @@ namespace PMS.Presentation.ViewModels
             CancelCommand = new RelayCommand(_ => OnCancel());
         }
 
-        // Konstruktor do edycji – przekazuję istniejący model
         public AddTaskViewModel(
             TaskModel existing,
             ITaskRepository repo,
@@ -57,10 +56,10 @@ namespace PMS.Presentation.ViewModels
         {
             _editingModel = existing;
 
-            // Wczytujemy wartości z modelu
             _title = existing.Title;
             _desc = existing.Description;
-            _dueDate = existing.DueDate;
+            _startDate = existing.StartDate;
+            _deadline = existing.Deadline;
             _state = existing.State;
             _priority = existing.Priority;
         }
@@ -75,10 +74,10 @@ namespace PMS.Presentation.ViewModels
 
             if (_editingModel != null)
             {
-                // Edycja: nadpisujemy dane w istniejącym modelu
                 _editingModel.Title = Title;
                 _editingModel.Description = Description;
-                _editingModel.DueDate = DueDate;
+                _editingModel.StartDate = StartDate;
+                _editingModel.Deadline = Deadline;
                 _editingModel.State = State;
                 _editingModel.Priority = Priority;
 
@@ -87,8 +86,11 @@ namespace PMS.Presentation.ViewModels
             }
             else
             {
-                // Dodawanie nowego wpisu
-                var model = new TaskModel(Title, Description, DueDate, State, Priority);
+                var model = new TaskModel(
+                    Title, Description,
+                    StartDate, Deadline,
+                    State, Priority);
+
                 await _repo.AddAsync(model);
                 CreatedTask = model;
             }
@@ -96,14 +98,12 @@ namespace PMS.Presentation.ViewModels
             RequestClose?.Invoke(true);
         }
 
-        private void OnCancel()
-        {
-            RequestClose?.Invoke(false);
-        }
+        private void OnCancel() => RequestClose?.Invoke(false);
 
         private string _title = "";
         private string _desc = "";
-        private DateTime _dueDate;
+        private DateTime _startDate;
+        private DateTime _deadline;
         private TaskState _state;
         private TaskPriority _priority;
     }

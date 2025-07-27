@@ -34,14 +34,28 @@ namespace PMS.Presentation.ViewModels
             }
         }
 
-        public DateTime DueDate
+        public DateTime StartDate
         {
-            get => Model.DueDate;
+            get => Model.StartDate;
             set
             {
-                if (Model.DueDate != value)
+                if (Model.StartDate != value)
                 {
-                    Model.DueDate = value;
+                    Model.StartDate = value;
+                    OnPropertyChanged();
+                    _ = UpdateAsync();
+                }
+            }
+        }
+
+        public DateTime Deadline
+        {
+            get => Model.Deadline;
+            set
+            {
+                if (Model.Deadline != value)
+                {
+                    Model.Deadline = value;
                     OnPropertyChanged();
                     _ = UpdateAsync();
                 }
@@ -102,12 +116,13 @@ namespace PMS.Presentation.ViewModels
         private async Task OnEditAsync()
         {
             var vm = new AddTaskViewModel(Model, _repo, _dialogs);
-
             var result = await _dialogs.ShowDialogAsync(vm);
-            if (result && vm.CreatedTask is TaskModel updated)
+
+            if (result && vm.CreatedTask is TaskModel)
             {
                 OnPropertyChanged(nameof(Title));
-                OnPropertyChanged(nameof(DueDate));
+                OnPropertyChanged(nameof(StartDate));
+                OnPropertyChanged(nameof(Deadline));
                 OnPropertyChanged(nameof(State));
                 OnPropertyChanged(nameof(Priority));
             }
