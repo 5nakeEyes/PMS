@@ -3,6 +3,7 @@ using PMS.Domain.Models;
 using PMS.Presentation.Common;
 using PMS.Presentation.Interfaces;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace PMS.Presentation.ViewModels
 {
@@ -14,12 +15,13 @@ namespace PMS.Presentation.ViewModels
         public ObservableCollection<TaskItemViewModel> Tasks { get; }
             = new ObservableCollection<TaskItemViewModel>();
 
-        // 1. Opcje sortowania
         public ObservableCollection<string> SortOptions { get; }
             = new ObservableCollection<string>
         {
             "Tytuł A-Z",
             "Tytuł Z-A",
+            "Status ↑",
+            "Status ↓",
             "Priorytet ↑",
             "Priorytet ↓",
             "Data newest",
@@ -27,7 +29,6 @@ namespace PMS.Presentation.ViewModels
         };
 
         private string _selectedSortOption;
-        // 2. Właściwość wyzwalająca sortowanie
         public string SelectedSortOption
         {
             get => _selectedSortOption;
@@ -59,6 +60,8 @@ namespace PMS.Presentation.ViewModels
             {
                 "Tytuł A-Z" => Tasks.OrderBy(t => t.Title),
                 "Tytuł Z-A" => Tasks.OrderByDescending(t => t.Title),
+                "Status ↑" => Tasks.OrderBy(t => t.State),
+                "Status ↓" => Tasks.OrderByDescending(t => t.State),
                 "Priorytet ↑" => Tasks.OrderBy(t => t.Priority),
                 "Priorytet ↓" => Tasks.OrderByDescending(t => t.Priority),
                 "Data newest" => Tasks.OrderByDescending(t => t.StartDate),
@@ -66,11 +69,32 @@ namespace PMS.Presentation.ViewModels
                 _ => Tasks
             };
 
-            // Przebuduj ObservableCollection
             var list = sorted.ToList();
             Tasks.Clear();
             foreach (var vm in list)
                 Tasks.Add(vm);
+        }
+
+        private void HookItem(TaskItemViewModel vm)
+        {
+            vm.PropertyChanged += ItemVm_PropertyChanged;
+            vm.Deleted += _ => UnhookItem(vm);
+        }
+
+        private void UnhookItem(TaskItemViewModel vm)
+        {
+            vm.PropertyChanged -= ItemVm_PropertyChanged;
+            Tasks.Remove(vm);
+            ApplySorting();
+        }
+
+        private void ItemVm_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(TaskItemViewModel.Priority) ||
+                e.PropertyName == nameof(TaskItemViewModel.State))
+            {
+                ApplySorting();
+            }
         }
 
         private async Task LoadAsync()
@@ -80,11 +104,10 @@ namespace PMS.Presentation.ViewModels
             foreach (var m in models)
             {
                 var itemVm = new TaskItemViewModel(m, _repo, _dialogs);
-                itemVm.Deleted += vm => Tasks.Remove(vm);
+                HookItem(itemVm);
                 Tasks.Add(itemVm);
             }
 
-            // Po załadowaniu danych od razu sortujemy
             ApplySorting();
         }
 
@@ -92,10 +115,11 @@ namespace PMS.Presentation.ViewModels
         {
             var vm = new AddTaskViewModel(_repo, _dialogs);
             var ok = await _dialogs.ShowDialogAsync(vm);
-            if (!ok || vm.CreatedTask is not TaskModel created) return;
+            if (!ok || vm.CreatedTask is not TaskModel created)
+                return;
 
             var itemVm = new TaskItemViewModel(created, _repo, _dialogs);
-            itemVm.Deleted += vm => Tasks.Remove(vm);
+            HookItem(itemVm);
             Tasks.Add(itemVm);
 
             ApplySorting();
