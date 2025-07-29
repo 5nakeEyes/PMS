@@ -13,29 +13,49 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Dodaj -->
-        <Button Grid.Row="0"
-            Content="Dodaj"
-            Command="{Binding AddCommand}"
-            Width="100"
-            HorizontalAlignment="Left"
-            Margin="0,0,0,5"/>
+        <!-- Dodaj + Sortowanie -->
+        <Grid Grid.Row="0" Margin="0,0,0,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <!-- Przycisk Dodaj -->
+                <ColumnDefinition Width="*"/>
+                <!-- Przestrzeń elastyczna -->
+                <ColumnDefinition Width="Auto"/>
+                <!-- Etykieta Sortowanie -->
+                <ColumnDefinition Width="Auto"/>
+                <!-- ComboBox Sortowania -->
+            </Grid.ColumnDefinitions>
+
+            <!-- Przycisk Dodaj -->
+            <Button Grid.Column="0"
+                    Content="Dodaj"
+                    Command="{Binding AddCommand}"
+                    Width="100"
+                    HorizontalAlignment="Left"/>
+
+            <!-- Etykieta Sortowanie -->
+            <TextBlock Grid.Column="2"
+                       Text="Sortowanie:"
+                       VerticalAlignment="Center"
+                       Margin="0,0,5,0"/>
+
+            <!-- ComboBox Sortowania -->
+            <ComboBox Grid.Column="3"
+                      Width="160"
+                      ItemsSource="{Binding SortOptions}"
+                      SelectedItem="{Binding SelectedSortOption}"
+                      HorizontalAlignment="Right"/>
+        </Grid>
 
         <!-- Nagłówki -->
         <Grid Grid.Row="1" Margin="0,0,0,5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1.5*"/>
-                <!-- Tytuł -->
                 <ColumnDefinition Width=".5*"/>
-                <!-- Start -->
                 <ColumnDefinition Width=".5*"/>
-                <!-- Deadline -->
                 <ColumnDefinition Width=".5*"/>
-                <!-- Status -->
                 <ColumnDefinition Width=".5*"/>
-                <!-- Priorytet -->
                 <ColumnDefinition Width=".5*"/>
-                <!-- Akcje -->
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Column="0" Text="Tytuł" FontWeight="Bold" Margin="10,0,10,0"/>
@@ -52,10 +72,10 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Border CornerRadius="5"
-                    BorderBrush="Gray"
-                    BorderThickness="1"
-                    Margin="0,0,0,5"
-                    Padding="8">
+                                BorderBrush="Gray"
+                                BorderThickness="1"
+                                Margin="0,0,0,5"
+                                Padding="8">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="1.5*"/>
@@ -66,55 +86,47 @@
                                     <ColumnDefinition Width=".5*"/>
                                 </Grid.ColumnDefinitions>
 
-                                <!-- Tytuł -->
                                 <TextBlock Grid.Column="0"
-                           Text="{Binding Title}"
-                           VerticalAlignment="Center"
-                           Margin="0,0,10,0"/>
+                                           Text="{Binding Title}"
+                                           VerticalAlignment="Center"
+                                           Margin="0,0,10,0"/>
 
-                                <!-- StartDate -->
                                 <TextBlock Grid.Column="1"
-                           Text="{Binding StartDate, StringFormat={}{0:dd.MM.yyyy}}"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Center"/>
+                                           Text="{Binding StartDate, StringFormat={}{0:dd.MM.yyyy}}"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Center"/>
 
-                                <!-- Deadline -->
                                 <TextBlock Grid.Column="2"
-                           Text="{Binding Deadline, StringFormat={}{0:dd.MM.yyyy}}"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Center"/>
+                                           Text="{Binding Deadline, StringFormat={}{0:dd.MM.yyyy}}"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Center"/>
 
-                                <!-- Status -->
                                 <ComboBox Grid.Column="3"
-                          ItemsSource="{Binding AllStates}"
-                          SelectedItem="{Binding State, Mode=TwoWay}"
-                          HorizontalContentAlignment="Center"
-                          HorizontalAlignment="Stretch"/>
+                                          ItemsSource="{Binding AllStates}"
+                                          SelectedItem="{Binding State, Mode=TwoWay}"
+                                          HorizontalContentAlignment="Center"
+                                          HorizontalAlignment="Stretch"/>
 
-                                <!-- Priorytet -->
                                 <ComboBox Grid.Column="4"
-                          ItemsSource="{Binding AllPriorities}"
-                          SelectedItem="{Binding Priority, Mode=TwoWay}"
-                          HorizontalContentAlignment="Center"
-                          HorizontalAlignment="Stretch"/>
+                                          ItemsSource="{Binding AllPriorities}"
+                                          SelectedItem="{Binding Priority, Mode=TwoWay}"
+                                          HorizontalContentAlignment="Center"
+                                          HorizontalAlignment="Stretch"/>
 
-                                <!-- Edytuj / Usuń -->
                                 <Grid Grid.Column="5">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
                                     <Button Grid.Column="0"
-                          Content="Edytuj"
-                          Command="{Binding EditCommand}"
-                          ToolTip="Edytuj zadanie"
-                          HorizontalAlignment="Stretch"
-                          Margin="0,0,1,0"/>
+                                            Content="Edytuj"
+                                            Command="{Binding EditCommand}"
+                                            ToolTip="Edytuj zadanie"
+                                            Margin="0,0,1,0"/>
                                     <Button Grid.Column="1"
-                          Content="Usuń"
-                          Command="{Binding DeleteCommand}"
-                          ToolTip="Usuń zadanie"
-                          HorizontalAlignment="Stretch"/>
+                                            Content="Usuń"
+                                            Command="{Binding DeleteCommand}"
+                                            ToolTip="Usuń zadanie"/>
                                 </Grid>
                             </Grid>
                         </Border>
