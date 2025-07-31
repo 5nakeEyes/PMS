@@ -3,7 +3,6 @@ using PMS.Domain.Models;
 using PMS.Presentation.Common;
 using PMS.Presentation.Interfaces;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 
 namespace PMS.Presentation.ViewModels
 {
@@ -12,16 +11,19 @@ namespace PMS.Presentation.ViewModels
         private readonly ITaskRepository _repo;
         private readonly IDialogService _dialogs;
 
+        // 1) Bufor wszystkich VM-ek
+        private readonly List<TaskItemViewModel> _allTasks = new List<TaskItemViewModel>();
+
+        // 2) Kolekcja widoczna w UI
         public ObservableCollection<TaskItemViewModel> Tasks { get; }
             = new ObservableCollection<TaskItemViewModel>();
 
+        // 3) Opcje sortowania
         public ObservableCollection<string> SortOptions { get; }
             = new ObservableCollection<string>
         {
             "Tytuł A-Z",
             "Tytuł Z-A",
-            "Status ↑",
-            "Status ↓",
             "Priorytet ↑",
             "Priorytet ↓",
             "Data newest",
@@ -35,7 +37,19 @@ namespace PMS.Presentation.ViewModels
             set
             {
                 if (SetProperty(ref _selectedSortOption, value))
-                    ApplySorting();
+                    RefreshTasks();
+            }
+        }
+
+        // 4) Tekst wyszukiwania
+        private string _searchText;
+        public string SearchText
+        {
+            get => _searchText;
+            set
+            {
+                if (SetProperty(ref _searchText, value))
+                    RefreshTasks();
             }
         }
 
@@ -51,78 +65,62 @@ namespace PMS.Presentation.ViewModels
             AddCommand = new AsyncCommand(_ => OpenAddAsync());
 
             SelectedSortOption = SortOptions.First();
+            SearchText = string.Empty;
             _ = LoadAsync();
         }
 
-        private void ApplySorting()
+        // 5) Łączy filtr i sortowanie, potem odświeża Tasks
+        private void RefreshTasks()
         {
-            IEnumerable<TaskItemViewModel> sorted = SelectedSortOption switch
+            // filtruj po tytule
+            var filtered = _allTasks
+                .Where(vm => string.IsNullOrWhiteSpace(SearchText)
+                             || vm.Title.Contains(SearchText, StringComparison.InvariantCultureIgnoreCase));
+
+            // zastosuj sortowanie
+            var sorted = SelectedSortOption switch
             {
-                "Tytuł A-Z" => Tasks.OrderBy(t => t.Title),
-                "Tytuł Z-A" => Tasks.OrderByDescending(t => t.Title),
-                "Status ↑" => Tasks.OrderBy(t => t.State),
-                "Status ↓" => Tasks.OrderByDescending(t => t.State),
-                "Priorytet ↑" => Tasks.OrderBy(t => t.Priority),
-                "Priorytet ↓" => Tasks.OrderByDescending(t => t.Priority),
-                "Data newest" => Tasks.OrderByDescending(t => t.StartDate),
-                "Data oldest" => Tasks.OrderBy(t => t.StartDate),
-                _ => Tasks
+                "Tytuł A-Z" => filtered.OrderBy(t => t.Title),
+                "Tytuł Z-A" => filtered.OrderByDescending(t => t.Title),
+                "Priorytet ↑" => filtered.OrderBy(t => t.Priority),
+                "Priorytet ↓" => filtered.OrderByDescending(t => t.Priority),
+                "Data newest" => filtered.OrderByDescending(t => t.StartDate),
+                "Data oldest" => filtered.OrderBy(t => t.StartDate),
+                _ => filtered
             };
 
-            var list = sorted.ToList();
+            // odśwież widoczną kolekcję
             Tasks.Clear();
-            foreach (var vm in list)
+            foreach (var vm in sorted)
                 Tasks.Add(vm);
-        }
-
-        private void HookItem(TaskItemViewModel vm)
-        {
-            vm.PropertyChanged += ItemVm_PropertyChanged;
-            vm.Deleted += _ => UnhookItem(vm);
-        }
-
-        private void UnhookItem(TaskItemViewModel vm)
-        {
-            vm.PropertyChanged -= ItemVm_PropertyChanged;
-            Tasks.Remove(vm);
-            ApplySorting();
-        }
-
-        private void ItemVm_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(TaskItemViewModel.Priority) ||
-                e.PropertyName == nameof(TaskItemViewModel.State))
-            {
-                ApplySorting();
-            }
         }
 
         private async Task LoadAsync()
         {
+            _allTasks.Clear();
             Tasks.Clear();
+
             var models = await _repo.GetAllAsync();
             foreach (var m in models)
             {
-                var itemVm = new TaskItemViewModel(m, _repo, _dialogs);
-                HookItem(itemVm);
-                Tasks.Add(itemVm);
+                var vm = new TaskItemViewModel(m, _repo, _dialogs);
+                _allTasks.Add(vm);
             }
 
-            ApplySorting();
+            RefreshTasks();
         }
 
         private async Task OpenAddAsync()
         {
-            var vm = new AddTaskViewModel(_repo, _dialogs);
-            var ok = await _dialogs.ShowDialogAsync(vm);
-            if (!ok || vm.CreatedTask is not TaskModel created)
+            var addVm = new AddTaskViewModel(_repo, _dialogs);
+            var ok = await _dialogs.ShowDialogAsync(addVm);
+            if (!ok || addVm.CreatedTask is not TaskModel created)
                 return;
 
             var itemVm = new TaskItemViewModel(created, _repo, _dialogs);
-            HookItem(itemVm);
-            Tasks.Add(itemVm);
+            _allTasks.Add(itemVm);
 
-            ApplySorting();
+            RefreshTasks();
         }
     }
 }

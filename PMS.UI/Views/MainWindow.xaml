@@ -13,17 +13,19 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Dodaj + Sortowanie -->
+        <!-- Dodaj + Szukaj + Sortowanie -->
         <Grid Grid.Row="0" Margin="0,0,0,5">
             <Grid.ColumnDefinitions>
+                <!-- 0: Przycisk Dodaj -->
                 <ColumnDefinition Width="Auto"/>
-                <!-- Przycisk Dodaj -->
+                <!-- 1: Pole wyszukiwania -->
+                <ColumnDefinition Width="Auto"/>
+                <!-- 2: Przestrzeń elastyczna -->
                 <ColumnDefinition Width="*"/>
-                <!-- Przestrzeń elastyczna -->
+                <!-- 3: Etykieta Sortowanie -->
                 <ColumnDefinition Width="Auto"/>
-                <!-- Etykieta Sortowanie -->
+                <!-- 4: ComboBox Sortowania -->
                 <ColumnDefinition Width="Auto"/>
-                <!-- ComboBox Sortowania -->
             </Grid.ColumnDefinitions>
 
             <!-- Przycisk Dodaj -->
@@ -33,14 +35,23 @@
                     Width="100"
                     HorizontalAlignment="Left"/>
 
+            <!-- Pole wyszukiwania -->
+            <TextBox Grid.Column="1"
+                     Margin="5,0,0,0"
+                     Width="200"
+                     Height="25"
+                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource WatermarkTextBoxStyle}"
+                     Tag="Szukaj..."/>
+
             <!-- Etykieta Sortowanie -->
-            <TextBlock Grid.Column="2"
+            <TextBlock Grid.Column="3"
                        Text="Sortowanie:"
                        VerticalAlignment="Center"
                        Margin="0,0,5,0"/>
 
             <!-- ComboBox Sortowania -->
-            <ComboBox Grid.Column="3"
+            <ComboBox Grid.Column="4"
                       Width="160"
                       ItemsSource="{Binding SortOptions}"
                       SelectedItem="{Binding SelectedSortOption}"
@@ -58,12 +69,12 @@
                 <ColumnDefinition Width=".5*"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="0" Text="Tytuł" FontWeight="Bold" Margin="10,0,10,0"/>
-            <TextBlock Grid.Column="1" Text="Start" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,10,0"/>
-            <TextBlock Grid.Column="2" Text="Termin" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,10,0"/>
-            <TextBlock Grid.Column="3" Text="Status" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,10,0"/>
-            <TextBlock Grid.Column="4" Text="Priorytet" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,10,0"/>
-            <TextBlock Grid.Column="5" Text="Akcje" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,10,0"/>
+            <TextBlock Grid.Column="0" Text="Tytuł"      FontWeight="Bold" Margin="10,0,10,0"/>
+            <TextBlock Grid.Column="1" Text="Start"      FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,10,0"/>
+            <TextBlock Grid.Column="2" Text="Termin"     FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,10,0"/>
+            <TextBlock Grid.Column="3" Text="Status"     FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,10,0"/>
+            <TextBlock Grid.Column="4" Text="Priorytet"  FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,10,0"/>
+            <TextBlock Grid.Column="5" Text="Akcje"      FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,10,0"/>
         </Grid>
 
         <!-- Lista zadań -->
