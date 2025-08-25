@@ -1,126 +1,88 @@
-﻿using PMS.Application.Repositories;
-using PMS.Domain.Models;
+﻿using PMS.Domain.Models;
 using PMS.Presentation.Common;
-using PMS.Presentation.Interfaces;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace PMS.Presentation.ViewModels
 {
     public class TaskViewModel : ViewModelBase
     {
-        private readonly ITaskRepository _repo;
-        private readonly IDialogService _dialogs;
+        private string _title;
+        private DateTime _deadline;
+        private TaskState _state;
+        private TaskPriority _priority;
 
-        // 1) Bufor wszystkich VM-ek
-        private readonly List<TaskItemViewModel> _allTasks = new List<TaskItemViewModel>();
-
-        // 2) Kolekcja widoczna w UI
-        public ObservableCollection<TaskItemViewModel> Tasks { get; }
-            = new ObservableCollection<TaskItemViewModel>();
-
-        // 3) Opcje sortowania
-        public ObservableCollection<string> SortOptions { get; }
-            = new ObservableCollection<string>
+        public string Title
         {
-            "Tytuł A-Z",
-            "Tytuł Z-A",
-            "Priorytet ↑",
-            "Priorytet ↓",
-            "Data newest",
-            "Data oldest"
-        };
-
-        private string _selectedSortOption;
-        public string SelectedSortOption
-        {
-            get => _selectedSortOption;
+            get => _title;
             set
             {
-                if (SetProperty(ref _selectedSortOption, value))
-                    RefreshTasks();
+                if (SetProperty(ref _title, value))
+                    Model.Title = value;
             }
         }
 
-        // 4) Tekst wyszukiwania
-        private string _searchText;
-        public string SearchText
+        // brak właściwości StartDate w TaskModel; korzystamy z Deadline
+        public DateTime StartDate => _deadline;
+
+        public DateTime Deadline
         {
-            get => _searchText;
+            get => _deadline;
             set
             {
-                if (SetProperty(ref _searchText, value))
-                    RefreshTasks();
+                if (SetProperty(ref _deadline, value))
+                    Model.Deadline = value;
             }
         }
 
-        public IAsyncCommand AddCommand { get; }
+        public TaskState State
+        {
+            get => _state;
+            set
+            {
+                if (SetProperty(ref _state, value))
+                    Model.State = value;
+            }
+        }
+
+        public TaskPriority Priority
+        {
+            get => _priority;
+            set
+            {
+                if (SetProperty(ref _priority, value))
+                    Model.Priority = value;
+            }
+        }
+
+        public ObservableCollection<TaskState> AllStates { get; }
+        public ObservableCollection<TaskPriority> AllPriorities { get; }
+
+        public ICommand EditCommand { get; }
+        public ICommand DeleteCommand { get; }
+
+        public TaskModel Model { get; }
 
         public TaskViewModel(
-            ITaskRepository repo,
-            IDialogService dialogs)
+            TaskModel model,
+            Action<TaskViewModel> editAction,
+            Action<TaskViewModel> deleteAction)
         {
-            _repo = repo;
-            _dialogs = dialogs;
+            Model = model;
+            _title = model.Title;
+            _deadline = model.Deadline;
+            _state = model.State;
+            _priority = model.Priority;
 
-            AddCommand = new AsyncCommand(_ => OpenAddAsync());
+            AllStates = new ObservableCollection<TaskState>(
+                                Enum.GetValues(typeof(TaskState))
+                                    .Cast<TaskState>());
+            AllPriorities = new ObservableCollection<TaskPriority>(
+                                Enum.GetValues(typeof(TaskPriority))
+                                    .Cast<TaskPriority>());
 
-            SelectedSortOption = SortOptions.First();
-            SearchText = string.Empty;
-            _ = LoadAsync();
-        }
-
-        // 5) Łączy filtr i sortowanie, potem odświeża Tasks
-        private void RefreshTasks()
-        {
-            // filtruj po tytule
-            var filtered = _allTasks
-                .Where(vm => string.IsNullOrWhiteSpace(SearchText)
-                             || vm.Title.Contains(SearchText, StringComparison.InvariantCultureIgnoreCase));
-
-            // zastosuj sortowanie
-            var sorted = SelectedSortOption switch
-            {
-                "Tytuł A-Z" => filtered.OrderBy(t => t.Title),
-                "Tytuł Z-A" => filtered.OrderByDescending(t => t.Title),
-                "Priorytet ↑" => filtered.OrderBy(t => t.Priority),
-                "Priorytet ↓" => filtered.OrderByDescending(t => t.Priority),
-                "Data newest" => filtered.OrderByDescending(t => t.StartDate),
-                "Data oldest" => filtered.OrderBy(t => t.StartDate),
-                _ => filtered
-            };
-
-            // odśwież widoczną kolekcję
-            Tasks.Clear();
-            foreach (var vm in sorted)
-                Tasks.Add(vm);
-        }
-
-        private async Task LoadAsync()
-        {
-            _allTasks.Clear();
-            Tasks.Clear();
-
-            var models = await _repo.GetAllAsync();
-            foreach (var m in models)
-            {
-                var vm = new TaskItemViewModel(m, _repo, _dialogs);
-                _allTasks.Add(vm);
-            }
-
-            RefreshTasks();
-        }
-
-        private async Task OpenAddAsync()
-        {
-            var addVm = new AddTaskViewModel(_repo, _dialogs);
-            var ok = await _dialogs.ShowDialogAsync(addVm);
-            if (!ok || addVm.CreatedTask is not TaskModel created)
-                return;
-
-            var itemVm = new TaskItemViewModel(created, _repo, _dialogs);
-            _allTasks.Add(itemVm);
-
-            RefreshTasks();
+            EditCommand = new RelayCommand(_ => editAction(this));
+            DeleteCommand = new RelayCommand(_ => deleteAction(this));
         }
     }
 }

@@ -2,148 +2,227 @@
     x:Class="PMS.UI.Views.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="Task Manager"
+    xmlns:views="clr-namespace:PMS.UI.Views"
+    xmlns:local="clr-namespace:PMS.UI.Converters"
+    Title="Project Manager Software (PMS)"
     Height="500"
-    Width="800">
+    Width="800"
+    MinHeight="500"
+    MinWidth="800"
+    WindowStartupLocation="CenterScreen">
 
-    <Grid Margin="10">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+    <Window.Resources>
+        <local:StringNotEmptyToVisibilityConverter x:Key="NonEmptyToVisibility"/>
+    </Window.Resources>
 
-        <!-- Dodaj + Szukaj + Sortowanie -->
-        <Grid Grid.Row="0" Margin="0,0,0,5">
-            <Grid.ColumnDefinitions>
-                <!-- 0: Przycisk Dodaj -->
-                <ColumnDefinition Width="Auto"/>
-                <!-- 1: Pole wyszukiwania -->
-                <ColumnDefinition Width="Auto"/>
-                <!-- 2: Przestrzeń elastyczna -->
-                <ColumnDefinition Width="*"/>
-                <!-- 3: Etykieta Sortowanie -->
-                <ColumnDefinition Width="Auto"/>
-                <!-- 4: ComboBox Sortowania -->
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
+    <Grid Margin="5" Background="White">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="190"/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-            <!-- Przycisk Dodaj -->
-            <Button Grid.Column="0"
-                    Content="Dodaj"
-                    Command="{Binding AddCommand}"
-                    Width="100"
-                    HorizontalAlignment="Left"/>
+        <!-- LEWY PANEL: projekty -->
+        <Border Grid.Column="0"
+                BorderBrush="LightGray"
+                BorderThickness="1"
+                CornerRadius="4"
+                Padding="4">
+            <StackPanel>
+                <Button
+                Content="Dodaj projekt +"
+                Height="25" Width="100"
+                Margin="0,0,0,5"
+                HorizontalAlignment="Left"
+                Command="{Binding ProjectList.AddProjectCommand}" />
+                <ListBox
+                ItemsSource="{Binding ProjectList.Projects}"
+                SelectedItem="{Binding ProjectList.SelectedProject, Mode=TwoWay}"
+                DisplayMemberPath="Name"
+                BorderBrush="#CCC"
+                BorderThickness="1" />
+            </StackPanel>
+        </Border>
+        <Grid Grid.Column="1"/>
 
-            <!-- Pole wyszukiwania -->
-            <TextBox Grid.Column="1"
-                     Margin="5,0,0,0"
-                     Width="200"
-                     Height="25"
-                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
-                     Style="{StaticResource WatermarkTextBoxStyle}"
-                     Tag="Szukaj..."/>
+        <!-- PRAWY PANEL: zadania -->
+        <Grid Grid.Column="2" Background="White">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <StackPanel>
+            <Border BorderBrush="LightGray"
+                    BorderThickness="1"
+                    CornerRadius="4"
+                    Padding="4">
+                <StackPanel>
+                    <Grid Grid.Row="0" Margin="0" Background="White">
 
-            <!-- Etykieta Sortowanie -->
-            <TextBlock Grid.Column="3"
-                       Text="Sortowanie:"
-                       VerticalAlignment="Center"
-                       Margin="0,0,5,0"/>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
 
-            <!-- ComboBox Sortowania -->
-            <ComboBox Grid.Column="4"
-                      Width="160"
-                      ItemsSource="{Binding SortOptions}"
-                      SelectedItem="{Binding SelectedSortOption}"
-                      HorizontalAlignment="Right"/>
-        </Grid>
+                        <TextBlock Grid.Column="0" 
+                    Text="{Binding ProjectList.SelectedProject.Name}" 
+                    HorizontalAlignment="Left" 
+                    VerticalAlignment="Bottom" 
+                    FontWeight="Bold" 
+                    FontSize="26" Margin="5,2,15,2"/>
 
-        <!-- Nagłówki -->
-        <Grid Grid.Row="1" Margin="0,0,0,5">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1.5*"/>
-                <ColumnDefinition Width=".5*"/>
-                <ColumnDefinition Width=".5*"/>
-                <ColumnDefinition Width=".5*"/>
-                <ColumnDefinition Width=".5*"/>
-                <ColumnDefinition Width=".5*"/>
-            </Grid.ColumnDefinitions>
+                        <Button Grid.Column="1"
+                    Content="Edit"
+                    Width="50" Height="20"
+                    VerticalAlignment="Bottom"
+                    Command="{Binding ProjectList.EditProjectCommand}"
+                    Margin="5,5,0,5" />
 
-            <TextBlock Grid.Column="0" Text="Tytuł"      FontWeight="Bold" Margin="10,0,10,0"/>
-            <TextBlock Grid.Column="1" Text="Start"      FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,10,0"/>
-            <TextBlock Grid.Column="2" Text="Termin"     FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,10,0"/>
-            <TextBlock Grid.Column="3" Text="Status"     FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,10,0"/>
-            <TextBlock Grid.Column="4" Text="Priorytet"  FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,10,0"/>
-            <TextBlock Grid.Column="5" Text="Akcje"      FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,10,0"/>
-        </Grid>
+                        <Button Grid.Column="2"
+                    Content="Delete"
+                    Width="50" Height="20"
+                    VerticalAlignment="Bottom"
+                    Command="{Binding ProjectList.RemoveProjectCommand}"
+                    Margin="5,5,0,5" />
+                    </Grid >
 
-        <!-- Lista zadań -->
-        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
-            <ItemsControl ItemsSource="{Binding Tasks}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Border CornerRadius="5"
-                                BorderBrush="Gray"
-                                BorderThickness="1"
-                                Margin="0,0,0,5"
-                                Padding="8">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="1.5*"/>
-                                    <ColumnDefinition Width=".5*"/>
-                                    <ColumnDefinition Width=".5*"/>
-                                    <ColumnDefinition Width=".5*"/>
-                                    <ColumnDefinition Width=".5*"/>
-                                    <ColumnDefinition Width=".5*"/>
-                                </Grid.ColumnDefinitions>
+                    <Grid Grid.Row="1" Margin="0,0,0,5" Background="LightGray">
 
-                                <TextBlock Grid.Column="0"
-                                           Text="{Binding Title}"
-                                           VerticalAlignment="Center"
-                                           Margin="0,0,10,0"/>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
 
-                                <TextBlock Grid.Column="1"
-                                           Text="{Binding StartDate, StringFormat={}{0:dd.MM.yyyy}}"
-                                           VerticalAlignment="Center"
-                                           HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Column="0" Text="Stan:" 
+                           FontWeight="SemiBold"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Bottom"
+                           Margin="5,5,5,5"/>
 
-                                <TextBlock Grid.Column="2"
-                                           Text="{Binding Deadline, StringFormat={}{0:dd.MM.yyyy}}"
-                                           VerticalAlignment="Center"
-                                           HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Text="{Binding ProjectList.SelectedProject.OverallState}" 
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Bottom"
+                           Margin="0,5,0,5"/>
 
-                                <ComboBox Grid.Column="3"
-                                          ItemsSource="{Binding AllStates}"
-                                          SelectedItem="{Binding State, Mode=TwoWay}"
-                                          HorizontalContentAlignment="Center"
-                                          HorizontalAlignment="Stretch"/>
+                        <TextBlock Grid.Column="2" Text="Deadline:" 
+                           HorizontalAlignment="Left" 
+                           VerticalAlignment="Bottom" 
+                           FontWeight="SemiBold" Margin="0,5,5,5"/>
 
-                                <ComboBox Grid.Column="4"
-                                          ItemsSource="{Binding AllPriorities}"
-                                          SelectedItem="{Binding Priority, Mode=TwoWay}"
-                                          HorizontalContentAlignment="Center"
-                                          HorizontalAlignment="Stretch"/>
+                            <TextBlock Grid.Column="3" Text="{Binding ProjectList.SelectedProject.Deadline, StringFormat={}{0:dd/MM/yyyy}}"
+                           HorizontalAlignment="Left" 
+                           VerticalAlignment="Bottom" 
+                           Margin="0,5,15,5"/>
 
-                                <Grid Grid.Column="5">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Button Grid.Column="0"
-                                            Content="Edytuj"
-                                            Command="{Binding EditCommand}"
-                                            ToolTip="Edytuj zadanie"
-                                            Margin="0,0,1,0"/>
-                                    <Button Grid.Column="1"
-                                            Content="Usuń"
-                                            Command="{Binding DeleteCommand}"
-                                            ToolTip="Usuń zadanie"/>
-                                </Grid>
-                            </Grid>
+                        <TextBlock Grid.Column="4" Text="Wykonano:" 
+                           FontWeight="SemiBold" 
+                           HorizontalAlignment="Right"
+                           VerticalAlignment="Bottom"
+                           Margin="0,5,5,5"/>
+
+                            <TextBlock Grid.Column="5" Text="{Binding ProjectList.SelectedProject.ProgressText}" 
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Bottom"
+                           Margin="0,5,5,5"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <Border BorderBrush="LightGray"
+                    BorderThickness="1"
+                    CornerRadius="4"
+                    Margin="0,10,0,0">
+                <StackPanel>
+                    <!-- Pasek Dodaj/Szukaj/Sortowanie -->
+            <Grid Grid.Row="2" Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="0"
+                        Content="Dodaj zadanie"
+                        Command="{Binding TaskList.AddTaskCommand}"
+                        Width="100"
+                        HorizontalAlignment="Left"/>
+
+                <TextBox Grid.Column="1"
+                         x:Name="SearchBox"
+                         Margin="7,0,0,0"
+                         Width="200" Height="25"
+                         Padding="4,0,0,0"
+                         Text="{Binding TaskList.SearchText, UpdateSourceTrigger=PropertyChanged}"
+                         Style="{StaticResource WatermarkTextBoxStyle}"
+                         Tag="Szukaj..."/>
+
+                <Button Grid.Column="2"
+                        Command="{Binding TaskList.ClearSearchCommand}"
+                        Visibility="{Binding Text, ElementName=SearchBox, Converter={StaticResource NonEmptyToVisibility}}"
+                        Content="X"
+                        Foreground="Red"
+                        FontWeight="Bold"
+                        FontSize="18"
+                        Width="25" Height="25"
+                        Padding="0"
+                        BorderThickness="0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        Margin="0,0,0,0"/>
+
+                        <TextBlock Grid.Column="3"
+                                Text="Sortowanie:"
+                                VerticalAlignment="Center"
+                                Margin="0,0,5,0"/>
+
+                        <ComboBox Grid.Column="4"
+                                Width="160"
+                                ItemsSource="{Binding TaskList.SortOptions}"
+                                SelectedItem="{Binding TaskList.SelectedSortOption, Mode=TwoWay}"
+                                HorizontalAlignment="Right"/>
+                    </Grid>
+
+                            <!-- Nagłówki kolumn -->
+                        <Border Padding="4" Margin="5,5,5,0" Background="LightGray">
+                        <Grid Grid.Row="3" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width=".5*"/>
+                                <ColumnDefinition Width=".5*"/>
+                                <ColumnDefinition Width=".5*"/>
+                                <ColumnDefinition Width=".5*"/>
+                                <ColumnDefinition Width=".5*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" Text="Tytuł"     FontWeight="Bold" HorizontalAlignment="Left"   Margin="10,0,10,0"/>
+                            <TextBlock Grid.Column="1" Text="Termin"    FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBlock Grid.Column="2" Text="Status"    FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBlock Grid.Column="3" Text="Priorytet" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBlock Grid.Column="4" Text="Akcje"     FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,10,0"/>
+
+                        </Grid>
                         </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
+                        <!-- Lista zadań -->
+                    <ScrollViewer Grid.Row="4" Margin="0,5,0,0" VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{Binding TaskList.TasksView}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <views:TaskView/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </StackPanel>
+            </Border>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>

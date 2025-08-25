@@ -13,10 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PMS.Application\PMS.Application.csproj" />
-    <ProjectReference Include="..\PMS.Domain\PMS.Domain.csproj" />
-    <ProjectReference Include="..\PMS.Infrastructure\PMS.Infrastructure.csproj" />
-    <ProjectReference Include="..\PMS.Presentation\PMS.Presentation.csproj" />
+    <ProjectReference Include="..\PMS.Models\PMS.Models.csproj" />
   </ItemGroup>
 
 </Project>

@@ -2,9 +2,9 @@
 
 namespace PMS.UI.Views
 {
-    public partial class TaskItemView : UserControl
+    public partial class AddProjectView : UserControl
     {
-        public TaskItemView()
+        public AddProjectView()
         {
             InitializeComponent();
         }

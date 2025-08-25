@@ -1,4 +1,4 @@
-﻿namespace PMS.Domain.Models
+﻿namespace PMS.Models
 {
     public class TaskModel
     {

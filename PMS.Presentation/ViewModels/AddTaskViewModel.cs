@@ -1,110 +1,94 @@
-﻿using PMS.Application.Repositories;
-using PMS.Domain.Models;
+﻿using PMS.Domain.Models;
 using PMS.Presentation.Common;
-using PMS.Presentation.Interfaces;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace PMS.Presentation.ViewModels
 {
     public class AddTaskViewModel : ViewModelBase
     {
-        private readonly ITaskRepository _repo;
-        private readonly IDialogService _dialogs;
-        private readonly TaskModel? _editingModel;
-
-        public string Title { get => _title; set => SetProperty(ref _title, value); }
-        public string Description { get => _desc; set => SetProperty(ref _desc, value); }
-
-        public DateTime StartDate { get => _startDate; set => SetProperty(ref _startDate, value); }
-        public DateTime Deadline { get => _deadline; set => SetProperty(ref _deadline, value); }
-
-        public TaskState State { get => _state; set => SetProperty(ref _state, value); }
-        public TaskPriority Priority { get => _priority; set => SetProperty(ref _priority, value); }
-
-        public TaskModel? CreatedTask { get; private set; }
-
-        public IEnumerable<TaskState> AllStates =>
-            Enum.GetValues(typeof(TaskState)).Cast<TaskState>();
-        public IEnumerable<TaskPriority> AllPriorities =>
-            Enum.GetValues(typeof(TaskPriority)).Cast<TaskPriority>();
-
-        public IAsyncCommand ConfirmCommand { get; }
-        public RelayCommand CancelCommand { get; }
-
-        public event Action<bool>? RequestClose;
-
-        public AddTaskViewModel(
-            ITaskRepository repo,
-            IDialogService dialogs)
+        // 1) Backing field i property zamiast pola
+        private ObservableCollection<TaskState> _allStates;
+        public ObservableCollection<TaskState> AllStates
         {
-            _repo = repo;
-            _dialogs = dialogs;
+            get => _allStates;
+            private set => SetProperty(ref _allStates, value);
+        }
 
-            StartDate = DateTime.Today;
-            Deadline = DateTime.Today;
-            State = TaskState.ToDo;
-            Priority = TaskPriority.Medium;
+        private ObservableCollection<TaskPriority> _allPriorities;
+        public ObservableCollection<TaskPriority> AllPriorities
+        {
+            get => _allPriorities;
+            private set => SetProperty(ref _allPriorities, value);
+        }
 
-            ConfirmCommand = new AsyncCommand(_ => OnConfirmAsync());
+        // 2) Title z powiadomieniem o zmianie i odświeżeniem CanExecute
+        private string _title = string.Empty;
+        public string Title
+        {
+            get => _title;
+            set
+            {
+                if (!SetProperty(ref _title, value)) return;
+
+                // odświeżamy dostępność komendy
+                (ConfirmCommand as RelayCommand)?.RaiseCanExecuteChanged();
+            }
+        }
+
+        private string _description = string.Empty;
+        public string Description
+        {
+            get => _description;
+            set => SetProperty(ref _description, value);
+        }
+
+        private DateTime _deadline = DateTime.Today;
+        public DateTime Deadline
+        {
+            get => _deadline;
+            set => SetProperty(ref _deadline, value);
+        }
+
+        private TaskState _state = TaskState.ToDo;
+        public TaskState State
+        {
+            get => _state;
+            set => SetProperty(ref _state, value);
+        }
+
+        private TaskPriority _priority = TaskPriority.Medium;
+        public TaskPriority Priority
+        {
+            get => _priority;
+            set => SetProperty(ref _priority, value);
+        }
+
+        public event EventHandler<bool>? CloseRequested;
+
+        public ICommand ConfirmCommand { get; }
+        public ICommand CancelCommand { get; }
+
+        public AddTaskViewModel()
+        {
+            AllStates = new ObservableCollection<TaskState>(
+                                Enum.GetValues(typeof(TaskState))
+                                    .Cast<TaskState>());
+            AllPriorities = new ObservableCollection<TaskPriority>(
+                                Enum.GetValues(typeof(TaskPriority))
+                                    .Cast<TaskPriority>());
+
+            ConfirmCommand = new RelayCommand(_ => OnConfirm(), _ => CanConfirm());
             CancelCommand = new RelayCommand(_ => OnCancel());
         }
 
-        public AddTaskViewModel(
-            TaskModel existing,
-            ITaskRepository repo,
-            IDialogService dialogs)
-            : this(repo, dialogs)
-        {
-            _editingModel = existing;
+        private bool CanConfirm()
+            => !string.IsNullOrWhiteSpace(Title);
 
-            _title = existing.Title;
-            _desc = existing.Description;
-            _startDate = existing.StartDate;
-            _deadline = existing.Deadline;
-            _state = existing.State;
-            _priority = existing.Priority;
-        }
+        private void OnConfirm()
+            => CloseRequested?.Invoke(this, true);
 
-        private async Task OnConfirmAsync()
-        {
-            if (string.IsNullOrWhiteSpace(Title))
-            {
-                await _dialogs.ShowConfirmAsync("Validation", "Title is required.");
-                return;
-            }
-
-            if (_editingModel != null)
-            {
-                _editingModel.Title = Title;
-                _editingModel.Description = Description;
-                _editingModel.StartDate = StartDate;
-                _editingModel.Deadline = Deadline;
-                _editingModel.State = State;
-                _editingModel.Priority = Priority;
-
-                await _repo.UpdateAsync(_editingModel);
-                CreatedTask = _editingModel;
-            }
-            else
-            {
-                var model = new TaskModel(
-                    Title, Description,
-                    StartDate, Deadline,
-                    State, Priority);
-
-                await _repo.AddAsync(model);
-                CreatedTask = model;
-            }
-
-            RequestClose?.Invoke(true);
-        }
-
-        private void OnCancel() => RequestClose?.Invoke(false);
-
-        private string _title = "";
-        private string _desc = "";
-        private DateTime _startDate;
-        private DateTime _deadline;
-        private TaskState _state;
-        private TaskPriority _priority;
+        private void OnCancel()
+            => CloseRequested?.Invoke(this, false);
     }
 }

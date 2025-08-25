@@ -1,15 +1,13 @@
-﻿using System.Windows;
-using PMS.Presentation.ViewModels;
+﻿using PMS.UI.ViewModels;
+using System.Windows;
 
 namespace PMS.UI.Views
 {
     public partial class AddTaskWindow : Window
     {
-        public AddTaskWindow(AddTaskViewModel vm)
+        public AddTaskWindow()
         {
             InitializeComponent();
-            DataContext = vm;
-            vm.RequestClose += result => DialogResult = result;
         }
     }
 }

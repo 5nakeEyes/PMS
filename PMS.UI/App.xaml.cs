@@ -1,46 +1,51 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System.Windows;
-using AppWpf = System.Windows.Application;
-using PMS.Application.Repositories;
-using PMS.Infrastructure.Repositories;
-using PMS.Infrastructure.Services;
 using PMS.UI.Views;
-using PMS.Presentation.ViewModels;
-using PMS.Presentation.Interfaces;
-using PMS.UI.Services;
-
+using System.Windows;
 
 namespace PMS.UI
 {
-    public partial class App : AppWpf
+    public partial class App : System.Windows.Application
     {
-        public static ServiceProvider Services { get; private set; }
+        public static IServiceProvider ServiceProvider { get; private set; }
 
         protected override void OnStartup(StartupEventArgs e)
         {
             var services = new ServiceCollection();
+            ConfigureServices(services);
 
-            // Infrastructure
-            services.AddSingleton<ITaskStorageService, TaskStorageService>();
-            services.AddTransient<ITaskRepository, TaskRepository>();
+            // validateScopes: true – wykryje błędy w rejestracji scoped → singleton
+            ServiceProvider = services.BuildServiceProvider(validateScopes: true);
 
-            // Platform Dialogue Service
-            services.AddSingleton<IDialogService, WpfDialogService>();
-
-            // ViewModels
-            services.AddTransient<TaskViewModel>();
-            services.AddTransient<AddTaskViewModel>();
-
-            // Windows
-            services.AddSingleton<MainWindow>();
-            services.AddTransient<AddTaskWindow>();
-
-            Services = services.BuildServiceProvider();
-
-            var main = Services.GetRequiredService<MainWindow>();
-            main.Show();
+            // uruchamiamy główne okno przez DI
+            var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
+            mainWindow.Show();
 
             base.OnStartup(e);
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            // upewniamy się, że kontener się zdispose’uje
+            if (ServiceProvider is IDisposable disp)
+            {
+                disp.Dispose();
+            }
+
+            base.OnExit(e);
+        }
+
+        private static void ConfigureServices(IServiceCollection services)
+        {
+            // ---- Infrastructure ----
+
+            // ---- Platformowe serwisy ----
+
+            // ---- ViewModels ----
+
+            // ---- Widoki ----
+            services.AddSingleton<MainWindow>();
+            services.AddTransient<AddTaskWindow>();
+            services.AddTransient<AddProjectWindow>();
         }
     }
 }

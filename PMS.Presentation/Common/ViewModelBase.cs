@@ -8,17 +8,17 @@ namespace PMS.Presentation.Common
         public event PropertyChangedEventHandler? PropertyChanged;
 
         protected void OnPropertyChanged([CallerMemberName] string? name = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
+            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 
         protected bool SetProperty<T>(
-            ref T field,
+            ref T storage,
             T value,
             [CallerMemberName] string? propertyName = null)
         {
-            if (Equals(field, value)) return false;
-            field = value;
+            if (Equals(storage, value))
+                return false;
+
+            storage = value;
             OnPropertyChanged(propertyName);
             return true;
         }

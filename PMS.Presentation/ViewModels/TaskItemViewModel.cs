@@ -1,142 +1,45 @@
-﻿using PMS.Application.Repositories;
-using PMS.Domain.Models;
+﻿using PMS.Domain.Models;
 using PMS.Presentation.Common;
-using PMS.Presentation.Interfaces;
 
 namespace PMS.Presentation.ViewModels
 {
     public class TaskItemViewModel : ViewModelBase
     {
-        private readonly ITaskRepository _repo;
-        private readonly IDialogService _dialogs;
-
-        public TaskModel Model { get; }
-
-        public int Id => Model.Id;
-
-        public IEnumerable<TaskState> AllStates =>
-            Enum.GetValues(typeof(TaskState)).Cast<TaskState>();
-
-        public IEnumerable<TaskPriority> AllPriorities =>
-            Enum.GetValues(typeof(TaskPriority)).Cast<TaskPriority>();
-
-        public string Title
-        {
-            get => Model.Title;
-            set
-            {
-                if (Model.Title != value)
-                {
-                    Model.Title = value;
-                    OnPropertyChanged();
-                    _ = UpdateAsync();
-                }
-            }
-        }
-
-        public DateTime StartDate
-        {
-            get => Model.StartDate;
-            set
-            {
-                if (Model.StartDate != value)
-                {
-                    Model.StartDate = value;
-                    OnPropertyChanged();
-                    _ = UpdateAsync();
-                }
-            }
-        }
-
-        public DateTime Deadline
-        {
-            get => Model.Deadline;
-            set
-            {
-                if (Model.Deadline != value)
-                {
-                    Model.Deadline = value;
-                    OnPropertyChanged();
-                    _ = UpdateAsync();
-                }
-            }
-        }
-
-        public TaskState State
-        {
-            get => Model.State;
-            set
-            {
-                if (Model.State != value)
-                {
-                    Model.State = value;
-                    OnPropertyChanged();
-                    _ = UpdateAsync();
-                }
-            }
-        }
-
-        public TaskPriority Priority
-        {
-            get => Model.Priority;
-            set
-            {
-                if (Model.Priority != value)
-                {
-                    Model.Priority = value;
-                    OnPropertyChanged();
-                    _ = UpdateAsync();
-                }
-            }
-        }
-
-        public IAsyncCommand EditCommand { get; }
-        public IAsyncCommand DeleteCommand { get; }
-
-        public event Action<TaskItemViewModel>? Deleted;
+        private readonly Action<TaskItemViewModel> _onEdit;
+        private readonly Action<TaskItemViewModel> _onDelete;
 
         public TaskItemViewModel(
             TaskModel model,
-            ITaskRepository repo,
-            IDialogService dialogs)
+            Action<TaskItemViewModel> onEdit,
+            Action<TaskItemViewModel> onDelete)
         {
-            Model = model;
-            _repo = repo;
-            _dialogs = dialogs;
+            Model = model ?? throw new ArgumentNullException(nameof(model));
+            _onEdit = onEdit ?? throw new ArgumentNullException(nameof(onEdit));
+            _onDelete = onDelete ?? throw new ArgumentNullException(nameof(onDelete));
 
-            EditCommand = new AsyncCommand(_ => OnEditAsync());
-            DeleteCommand = new AsyncCommand(_ => OnDeleteAsync());
+            // Inicjalizacja komend
+            EditCommand = new AsyncRelayCommand(ExecuteEditAsync);
+            DeleteCommand = new AsyncRelayCommand(ExecuteDeleteAsync);
         }
 
-        private async Task UpdateAsync()
+        public TaskModel Model { get; }
+
+        // Typy komend używamy IAsyncRelayCommand, nie AsyncCommand
+        public IAsyncRelayCommand EditCommand { get; }
+        public IAsyncRelayCommand DeleteCommand { get; }
+
+        // Metoda wywoływana przez AsyncRelayCommand
+        private async Task ExecuteEditAsync()
         {
-            await _repo.UpdateAsync(Model);
+            // Jeżeli masz logikę w OnEdit, wywołaj callback
+            _onEdit?.Invoke(this);
+            await Task.CompletedTask;
         }
 
-        private async Task OnEditAsync()
+        private async Task ExecuteDeleteAsync()
         {
-            var vm = new AddTaskViewModel(Model, _repo, _dialogs);
-            var result = await _dialogs.ShowDialogAsync(vm);
-
-            if (result && vm.CreatedTask is TaskModel)
-            {
-                OnPropertyChanged(nameof(Title));
-                OnPropertyChanged(nameof(StartDate));
-                OnPropertyChanged(nameof(Deadline));
-                OnPropertyChanged(nameof(State));
-                OnPropertyChanged(nameof(Priority));
-            }
-        }
-
-        private async Task OnDeleteAsync()
-        {
-            var confirm = await _dialogs.ShowConfirmAsync(
-                "Usuń zadanie",
-                $"Czy na pewno chcesz usunąć zadanie '{Model.Title}'?");
-            if (!confirm) return;
-
-            await _repo.DeleteAsync(Model.Id);
-            Deleted?.Invoke(this);
+            _onDelete?.Invoke(this);
+            await Task.CompletedTask;
         }
     }
 }
