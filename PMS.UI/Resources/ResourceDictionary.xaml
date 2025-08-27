@@ -5,13 +5,15 @@
     <Color x:Key="PrimaryColor">#3B82F6</Color>
     <Color x:Key="PrimaryHoverColor">#2563EB</Color>
     <Color x:Key="TextColor">#1F2937</Color>
-    <Color x:Key="BackgroundColor">#F7F9FC</Color>
+    <Color x:Key="FirstBackgroundColor">#F7F9FC</Color>
+    <Color x:Key="SecondBackgroundColor">#f6af3b</Color>
     <Color x:Key="BorderColor">#D1D5DB</Color>
 
     <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource PrimaryColor}"/>
     <SolidColorBrush x:Key="PrimaryHoverBrush" Color="{StaticResource PrimaryHoverColor}"/>
     <SolidColorBrush x:Key="TextBrush" Color="{StaticResource TextColor}"/>
-    <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource BackgroundColor}"/>
+    <SolidColorBrush x:Key="FirstBackgroundBrush" Color="{StaticResource FirstBackgroundColor}"/>
+    <SolidColorBrush x:Key="SecondBackgroundBrush" Color="{StaticResource SecondBackgroundColor}"/>
     <SolidColorBrush x:Key="BorderBrush" Color="{StaticResource BorderColor}"/>
 
     <!-- Button Style with Icon and Hover Effect -->
@@ -95,6 +97,11 @@
 
     </Style>
 
+    <Style TargetType="TextBlock" x:Key="LightTextBlockStyle">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+    </Style>
+
     <!-- ComboBox Style -->
     <Style TargetType="ComboBox">
         <Setter Property="Background" Value="White"/>
@@ -141,6 +148,52 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
+
+    <Style TargetType="Border" x:Key="FirstRoundedBorderStyle">
+        <Setter Property="CornerRadius" Value="6"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+        <Setter Property="Background" Value="{StaticResource FirstBackgroundBrush}"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="Padding" Value="6"/>
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="0.1"/>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="BorderBrush" Value="#E5E7EB"/>
+                <Setter Property="Background" Value="#F3F4F6"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style TargetType="Border" x:Key="SecondRoundedBorderStyle">
+        <Setter Property="CornerRadius" Value="6"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+        <Setter Property="Background" Value="{StaticResource SecondBackgroundBrush}"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="Padding" Value="6"/>
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect Color="Black" BlurRadius="4" ShadowDepth="1" Opacity="0.1"/>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="BorderBrush" Value="#E5E7EB"/>
+                <Setter Property="Background" Value="#F3F4F6"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
 </ResourceDictionary>

@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
-    <Border BorderThickness="1" CornerRadius="4" Padding="4">
+    <Border BorderThickness="1" CornerRadius="4">
         <StackPanel>
             <!-- Nagłówek projektu -->
             <Grid Margin="0">
@@ -40,6 +40,7 @@
             </Grid>
 
             <!-- Szczegóły projektu -->
+            <Border BorderThickness="1" Style="{StaticResource SecondRoundedBorderStyle}">
             <Grid Margin="0,0,0,5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto"/>
@@ -52,23 +53,30 @@
 
                 <TextBlock Grid.Column="0" Text="Stan:"
                            FontWeight="SemiBold"
-                           Margin="5,5,5,5"/>
+                           Margin="5,0,5,0"
+                           Style="{StaticResource LightTextBlockStyle}"/>
 
                 <TextBlock Grid.Column="1" Text="{Binding ProjectList.SelectedProject.OverallState}"
-                           Margin="0,5,0,5"/>
+                           Margin="0,0,0,0"
+                           Style="{StaticResource LightTextBlockStyle}"/>
 
                 <TextBlock Grid.Column="2" Text="Deadline:"
-                           FontWeight="SemiBold" Margin="0,5,5,5"/>
+                           FontWeight="SemiBold" Margin="0,0,5,0"
+                           Style="{StaticResource LightTextBlockStyle}"/>
 
                 <TextBlock Grid.Column="3" Text="{Binding ProjectList.SelectedProject.Deadline, StringFormat={}{0:dd/MM/yyyy}}"
-                           Margin="0,5,15,5"/>
+                           Margin="0,0,15,0"
+                           Style="{StaticResource LightTextBlockStyle}"/>
 
                 <TextBlock Grid.Column="4" Text="Wykonano:"
-                           FontWeight="SemiBold" Margin="0,5,5,5"/>
+                           FontWeight="SemiBold" Margin="0,0,5,0"
+                           Style="{StaticResource LightTextBlockStyle}"/>
 
                 <TextBlock Grid.Column="5" Text="{Binding ProjectList.SelectedProject.ProgressText}"
-                           Margin="0,5,5,5"/>
+                           Margin="0,0,5,0"
+                           Style="{StaticResource LightTextBlockStyle}"/>
             </Grid>
+                </Border>
         </StackPanel>
     </Border>
 </UserControl>

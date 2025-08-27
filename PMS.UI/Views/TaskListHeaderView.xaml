@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:PMS.UI.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Border Padding="4" Margin="5,5,5,0">
+    <Border Style="{StaticResource SecondRoundedBorderStyle}" Padding="4" Margin="5,5,5,0">
         <Grid Grid.Row="3" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width=".5*"/>
@@ -16,11 +16,11 @@
                 <ColumnDefinition Width=".5*"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="0" Text="Tytuł"     FontWeight="Bold" HorizontalAlignment="Left"   Margin="10,0,10,0"/>
-            <TextBlock Grid.Column="1" Text="Termin"    FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,10,0"/>
-            <TextBlock Grid.Column="2" Text="Status"    FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,10,0"/>
-            <TextBlock Grid.Column="3" Text="Priorytet" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,10,0"/>
-            <TextBlock Grid.Column="4" Text="Akcje"     FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,10,0"/>
+            <TextBlock Grid.Column="0" Text="Tytuł"     FontWeight="Bold" HorizontalAlignment="Left"   Margin="10,0,10,0" Style="{StaticResource LightTextBlockStyle}"/>
+            <TextBlock Grid.Column="1" Text="Termin"    FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,10,0" Style="{StaticResource LightTextBlockStyle}"/>
+            <TextBlock Grid.Column="2" Text="Status"    FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,10,0" Style="{StaticResource LightTextBlockStyle}"/>
+            <TextBlock Grid.Column="3" Text="Priorytet" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,10,0" Style="{StaticResource LightTextBlockStyle}"/>
+            <TextBlock Grid.Column="4" Text="Akcje"     FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,10,0" Style="{StaticResource LightTextBlockStyle}"/>
 
         </Grid>
     </Border>

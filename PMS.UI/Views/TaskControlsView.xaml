@@ -28,7 +28,8 @@
                  Width="200" Height="25"
                  Padding="4,0,0,0"
                  Text="{Binding TaskList.SearchText, UpdateSourceTrigger=PropertyChanged}"
-                 Tag="Szukaj..."/>
+                 Tag="Szukaj..."
+                 Style="{StaticResource WatermarkTextBoxStyle}"/>
 
         <Button Grid.Column="2"
                 Command="{Binding TaskList.ClearSearchCommand}"
