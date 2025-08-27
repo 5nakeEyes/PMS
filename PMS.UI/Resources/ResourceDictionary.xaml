@@ -120,15 +120,20 @@
                                           IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
                                           />
                         </Border>
+
                         <Popup x:Name="Popup"
-                               IsOpen="{TemplateBinding IsDropDownOpen}"
-                               Placement="Bottom">
+                            IsOpen="{TemplateBinding IsDropDownOpen}"
+                            Placement="Bottom"
+                            AllowsTransparency="True"
+                            Focusable="False"
+                            PopupAnimation="Slide"
+                            Width="{Binding ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ComboBox}}">
                             <Border Background="White"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="1"
-                                    CornerRadius="6">
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="1"
+                                CornerRadius="6">
                                 <ScrollViewer>
-                                    <ItemsPresenter/>
+                                    <ItemsPresenter />
                                 </ScrollViewer>
                             </Border>
                         </Popup>
