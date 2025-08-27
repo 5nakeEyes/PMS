@@ -4,7 +4,7 @@
     <Style x:Key="WatermarkTextBoxStyle" TargetType="TextBox">
         <Setter Property="Background" Value="White"/>
         <Setter Property="Padding" Value="1"/>
-        <Setter Property="BorderBrush" Value="Gray"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Template">
             <Setter.Value>

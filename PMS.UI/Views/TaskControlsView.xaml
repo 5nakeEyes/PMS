@@ -5,7 +5,8 @@
     <UserControl.Resources>
         <local:StringNotEmptyToVisibilityConverter x:Key="NonEmptyToVisibility"/>
     </UserControl.Resources>
-
+    
+    <Border Style="{StaticResource FirstRoundedBorderStyle}">
     <Grid Margin="5">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -16,9 +17,9 @@
         </Grid.ColumnDefinitions>
 
         <Button Grid.Column="0"
-                Content="Dodaj zadanie"
+                Content="Dodaj zadanie +"
                 Command="{Binding TaskList.AddTaskCommand}"
-                Width="100"
+                Width="auto"
                 HorizontalAlignment="Left"
                 Style="{StaticResource IconButtonStyle}"/>
 
@@ -50,9 +51,10 @@
                    Margin="0,0,5,0"/>
 
         <ComboBox Grid.Column="4"
-                  Width="160"
+                  Width="90"
                   ItemsSource="{Binding TaskList.SortOptions}"
                   SelectedItem="{Binding TaskList.SelectedSortOption, Mode=TwoWay}"
                   HorizontalAlignment="Right"/>
     </Grid>
+    </Border>
 </UserControl>
