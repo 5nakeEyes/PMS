@@ -51,7 +51,7 @@
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Grid.Column="0" Text="Stan:"
+                <TextBlock Grid.Column="0" Text="State:"
                            FontWeight="SemiBold"
                            Margin="5,0,5,0"
                            Style="{StaticResource LightTextBlockStyle}"/>
@@ -68,7 +68,7 @@
                            Margin="0,0,15,0"
                            Style="{StaticResource LightTextBlockStyle}"/>
 
-                <TextBlock Grid.Column="4" Text="Wykonano:"
+                    <TextBlock Grid.Column="4" Text="Task completed:"
                            FontWeight="SemiBold" Margin="0,0,5,0"
                            Style="{StaticResource LightTextBlockStyle}"/>
 

@@ -16,11 +16,11 @@
                 <ColumnDefinition Width=".5*"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="0" Text="Tytuł"     FontWeight="Bold" HorizontalAlignment="Left"   Margin="10,0,10,0" Style="{StaticResource LightTextBlockStyle}"/>
-            <TextBlock Grid.Column="1" Text="Termin"    FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,10,0" Style="{StaticResource LightTextBlockStyle}"/>
-            <TextBlock Grid.Column="2" Text="Status"    FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,10,0" Style="{StaticResource LightTextBlockStyle}"/>
-            <TextBlock Grid.Column="3" Text="Priorytet" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,10,0" Style="{StaticResource LightTextBlockStyle}"/>
-            <TextBlock Grid.Column="4" Text="Akcje"     FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,10,0" Style="{StaticResource LightTextBlockStyle}"/>
+            <TextBlock Grid.Column="0" Text="Title"     FontWeight="Bold" HorizontalAlignment="Left"   Margin="10,0,10,0" Style="{StaticResource LightTextBlockStyle}"/>
+            <TextBlock Grid.Column="1" Text="Deadline"    FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,10,0" Style="{StaticResource LightTextBlockStyle}"/>
+            <TextBlock Grid.Column="2" Text="State"    FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,10,0" Style="{StaticResource LightTextBlockStyle}"/>
+            <TextBlock Grid.Column="3" Text="Priority" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,10,0" Style="{StaticResource LightTextBlockStyle}"/>
+            <TextBlock Grid.Column="4" Text="Actions"     FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,10,0" Style="{StaticResource LightTextBlockStyle}"/>
 
         </Grid>
     </Border>

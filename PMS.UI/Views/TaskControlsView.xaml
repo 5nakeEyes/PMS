@@ -16,7 +16,7 @@
         </Grid.ColumnDefinitions>
 
         <Button Grid.Column="0"
-                Content="Dodaj zadanie +"
+                Content="Add task +"
                 Command="{Binding TaskList.AddTaskCommand}"
                 Width="auto"
                 HorizontalAlignment="Left"
@@ -28,7 +28,7 @@
                  Width="200" Height="25"
                  Padding="4,0,0,0"
                  Text="{Binding TaskList.SearchText, UpdateSourceTrigger=PropertyChanged}"
-                 Tag="Szukaj..."
+                 Tag="Search..."
                  Style="{StaticResource WatermarkTextBoxStyle}"/>
 
         <Button Grid.Column="2"
@@ -46,7 +46,7 @@
                 Style="{StaticResource IconButtonStyle}"/>
 
         <TextBlock Grid.Column="3"
-                   Text="Sortowanie:"
+                   Text="Sort:"
                    VerticalAlignment="Center"
                    Margin="0,0,5,0"/>
 

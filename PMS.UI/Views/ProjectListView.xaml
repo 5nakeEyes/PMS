@@ -9,7 +9,7 @@
     <Border Padding="4" Margin="0" Style="{StaticResource FirstRoundedBorderStyle}">
         <StackPanel>
             <Button
-            Content="Dodaj projekt +"
+            Content="Add project +"
             Width="auto"
             Margin="0,0,0,5"
             HorizontalAlignment="Left"

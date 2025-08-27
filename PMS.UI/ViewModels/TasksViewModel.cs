@@ -17,7 +17,7 @@ namespace PMS.Views.ViewModels
         public ReadOnlyObservableCollection<string> SortOptions { get; }
         private static readonly string[] _sortOptions =
         {
-        "Tytuł A-Z", "Tytuł Z-A", "Priorytet ↑", "Priorytet ↓", "Deadline"
+        "Title A-Z", "Title Z-A", "Priority ↑", "Priority ↓", "Deadline"
     };
 
         private string _selectedSortOption;
@@ -71,7 +71,11 @@ namespace PMS.Views.ViewModels
             if (_currentTasks != null)
             {
                 _currentTasks.CollectionChanged -= Tasks_CollectionChanged;
-                foreach (var t in _currentTasks) t.PropertyChanged -= Task_PropertyChanged;
+                foreach (var t in _currentTasks)
+                {
+                    t.PropertyChanged -= Task_PropertyChanged;
+                    t.DeleteRequested -= Task_DeleteRequested;
+                }
             }
 
             _currentTasks = project?.Tasks;
@@ -82,10 +86,24 @@ namespace PMS.Views.ViewModels
             if (_currentTasks != null)
             {
                 _currentTasks.CollectionChanged += Tasks_CollectionChanged;
-                foreach (var t in _currentTasks) t.PropertyChanged += Task_PropertyChanged;
+                foreach (var t in _currentTasks)
+                {
+                    t.PropertyChanged += Task_PropertyChanged;
+                    t.DeleteRequested += Task_DeleteRequested;
+                }
             }
 
             ApplyTaskSorting();
+        }
+
+        private void Task_DeleteRequested(TaskItemViewModel vm)
+        {
+            if (_currentTasks.Contains(vm))
+            {
+                _currentTasks.Remove(vm);
+                if (Project != null)
+                    _repo.Save(Project.Model);
+            }
         }
 
         private void Tasks_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
