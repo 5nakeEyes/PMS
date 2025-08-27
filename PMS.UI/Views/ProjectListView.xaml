@@ -15,11 +15,11 @@
             HorizontalAlignment="Left"
             Command="{Binding ProjectList.AddProjectCommand}" 
             Style="{StaticResource IconButtonStyle}"/>
-                <ListBox
+            <ListBox
                     ItemsSource="{Binding ProjectList.Projects}"
                     SelectedItem="{Binding ProjectList.SelectedProject, Mode=TwoWay}"
                     DisplayMemberPath="Name"
-                    BorderThickness="1" />
+                    BorderThickness="1"/>
         </StackPanel>
     </Border>
 </UserControl>
