@@ -1,0 +1,15 @@
+﻿<UserControl x:Class="PMS.UI.Views.TaskPanelView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:views="clr-namespace:PMS.UI.Views">
+    <Border BorderBrush="LightGray"
+            BorderThickness="1"
+            CornerRadius="4"
+            Margin="0,10,0,0">
+        <StackPanel>
+            <views:TaskControlsView/>
+            <views:TaskListHeaderView/>
+            <views:TaskListView/>
+        </StackPanel>
+    </Border>
+</UserControl>
