@@ -5,8 +5,7 @@
     <UserControl.Resources>
         <local:StringNotEmptyToVisibilityConverter x:Key="NonEmptyToVisibility"/>
     </UserControl.Resources>
-    
-    <Border Style="{StaticResource FirstRoundedBorderStyle}">
+
     <Grid Margin="5">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -36,13 +35,14 @@
                 Command="{Binding TaskList.ClearSearchCommand}"
                 Visibility="{Binding Text, ElementName=SearchBox, Converter={StaticResource NonEmptyToVisibility}}"
                 Content="X"
-                Foreground="LightSteelBlue"
+                Foreground="White"
                 FontWeight="Bold"
                 Width="25"
                 Padding="0"
                 BorderThickness="0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
+                Margin="2,0,0,0"
                 Style="{StaticResource IconButtonStyle}"/>
 
         <TextBlock Grid.Column="3"
@@ -56,5 +56,4 @@
                   SelectedItem="{Binding TaskList.SelectedSortOption, Mode=TwoWay}"
                   HorizontalAlignment="Right"/>
     </Grid>
-    </Border>
 </UserControl>

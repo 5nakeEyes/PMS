@@ -6,19 +6,20 @@
              xmlns:local="clr-namespace:PMS.UI.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-
-    <StackPanel>
-        <Button
-        Content="Dodaj projekt +"
-        Width="auto"
-        Margin="0,0,0,5"
-        HorizontalAlignment="Left"
-        Command="{Binding ProjectList.AddProjectCommand}" 
-        Style="{StaticResource IconButtonStyle}"/>
-        <ListBox
-        ItemsSource="{Binding ProjectList.Projects}"
-        SelectedItem="{Binding ProjectList.SelectedProject, Mode=TwoWay}"
-        DisplayMemberPath="Name"
-        BorderThickness="1" />
-    </StackPanel>
+    <Border Padding="4" Margin="0" Style="{StaticResource FirstRoundedBorderStyle}">
+        <StackPanel>
+            <Button
+            Content="Dodaj projekt +"
+            Width="auto"
+            Margin="0,0,0,5"
+            HorizontalAlignment="Left"
+            Command="{Binding ProjectList.AddProjectCommand}" 
+            Style="{StaticResource IconButtonStyle}"/>
+                <ListBox
+                    ItemsSource="{Binding ProjectList.Projects}"
+                    SelectedItem="{Binding ProjectList.SelectedProject, Mode=TwoWay}"
+                    DisplayMemberPath="Name"
+                    BorderThickness="1" />
+        </StackPanel>
+    </Border>
 </UserControl>

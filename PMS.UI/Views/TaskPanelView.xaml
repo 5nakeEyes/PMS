@@ -4,7 +4,8 @@
              xmlns:views="clr-namespace:PMS.UI.Views">
     <Border BorderThickness="1"
             CornerRadius="4"
-            Margin="0,10,0,0">
+            Margin="0,5,0,0"
+            Style="{StaticResource FirstRoundedBorderStyle}">
         <StackPanel>
             <views:TaskControlsView/>
             <views:TaskListHeaderView/>

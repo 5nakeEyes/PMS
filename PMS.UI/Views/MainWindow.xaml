@@ -21,10 +21,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <Border Grid.Column="0"
-                BorderThickness="1"
-                CornerRadius="4"
-                Padding="4">
+        <Border Grid.Column="0" >
             <views:ProjectListView/>
         </Border>
 
