@@ -1,11 +1,12 @@
 ﻿using PMS.Commands;
 using PMS.Models;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 
 namespace PMS.UI.ViewModels
 {
-    public class AddTaskViewModel : ViewModelBase
+    public class AddTaskViewModel : ViewModelBase, IDataErrorInfo
     {
         private string _title;
         private string _description;
@@ -107,5 +108,31 @@ namespace PMS.UI.ViewModels
                 Priority
             );
         }
+
+        #region IDataErrorInfo (walidacja)
+
+        public string Error => null;
+
+        public string this[string columnName]
+        {
+            get
+            {
+                switch (columnName)
+                {
+                    case nameof(Title):
+                        return string.IsNullOrWhiteSpace(Title)
+                            ? "Nazwa zadania jest wymagana"
+                            : null;
+                    case nameof(Deadline):
+                        return Deadline == null
+                            ? "Deadline nie może być pusty"
+                            : null;
+                    default:
+                        return null;
+                }
+            }
+        }
+
+        #endregion
     }
 }
