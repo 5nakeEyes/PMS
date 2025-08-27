@@ -10,15 +10,15 @@
     <StackPanel>
         <Button
         Content="Dodaj projekt +"
-        Height="25" Width="100"
+        Width="auto"
         Margin="0,0,0,5"
         HorizontalAlignment="Left"
-        Command="{Binding ProjectList.AddProjectCommand}" />
+        Command="{Binding ProjectList.AddProjectCommand}" 
+        Style="{StaticResource IconButtonStyle}"/>
         <ListBox
         ItemsSource="{Binding ProjectList.Projects}"
         SelectedItem="{Binding ProjectList.SelectedProject, Mode=TwoWay}"
         DisplayMemberPath="Name"
-        BorderBrush="#CCC"
         BorderThickness="1" />
     </StackPanel>
 </UserControl>

@@ -19,7 +19,8 @@
                 Content="Dodaj zadanie"
                 Command="{Binding TaskList.AddTaskCommand}"
                 Width="100"
-                HorizontalAlignment="Left"/>
+                HorizontalAlignment="Left"
+                Style="{StaticResource IconButtonStyle}"/>
 
         <TextBox Grid.Column="1"
                  x:Name="SearchBox"
@@ -33,14 +34,14 @@
                 Command="{Binding TaskList.ClearSearchCommand}"
                 Visibility="{Binding Text, ElementName=SearchBox, Converter={StaticResource NonEmptyToVisibility}}"
                 Content="X"
-                Foreground="Red"
+                Foreground="LightSteelBlue"
                 FontWeight="Bold"
-                FontSize="18"
-                Width="25" Height="25"
+                Width="25"
                 Padding="0"
                 BorderThickness="0"
                 HorizontalAlignment="Left"
-                VerticalAlignment="Center"/>
+                VerticalAlignment="Center"
+                Style="{StaticResource IconButtonStyle}"/>
 
         <TextBlock Grid.Column="3"
                    Text="Sortowanie:"

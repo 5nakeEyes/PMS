@@ -7,8 +7,7 @@
     mc:Ignorable="d">
 
 
-    <Border BorderBrush="LightGray"
-          BorderThickness="1"
+    <Border BorderThickness="1"
           CornerRadius="4"
           Padding="8"
           Margin="4">
@@ -66,11 +65,13 @@
                 Command="{Binding EditCommand}"
                 HorizontalAlignment="Center"
                 MinWidth="50"
-                Margin="0,0,4,0"/>
+                Margin="0,0,4,0"
+                Style="{StaticResource IconButtonStyle}"/>
                 <Button Content="Delete"
                 HorizontalAlignment="Center"
                 MinWidth="50"
-                Command="{Binding DeleteCommand}"/>
+                Command="{Binding DeleteCommand}"
+                Style="{StaticResource IconButtonStyle}"/>
             </StackPanel>
         </Grid>
     </Border>

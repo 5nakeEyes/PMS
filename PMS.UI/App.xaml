@@ -4,6 +4,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/ResourceDictionary.xaml"/>
                 <ResourceDictionary Source="Resources/WatermarkStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

@@ -72,7 +72,8 @@
               Command="{Binding ConfirmCommand}"
               CommandParameter="{Binding 
               RelativeSource={RelativeSource AncestorType=Window}}"
-              IsDefault="True"/>
+              IsDefault="True"
+              Style="{StaticResource IconButtonStyle}"/>
         </StackPanel>
   </Grid>
 </UserControl>
