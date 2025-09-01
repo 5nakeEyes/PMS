@@ -1,6 +1,4 @@
-# PMS
-
-Project Management Software
+# Project Management Software (PMS)
 
 Aplikacja do zarządzania projektami i zadaniami w ramach prostego systemu desktopowego. 
 Jej głównym celem jest umożliwienie użytkownikowi tworzenia, edytowania i organizowania projektów oraz przypisanych do nich zadań.
