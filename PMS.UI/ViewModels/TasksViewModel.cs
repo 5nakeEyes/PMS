@@ -98,6 +98,12 @@ namespace PMS.Views.ViewModels
 
         private void Task_DeleteRequested(TaskItemViewModel vm)
         {
+            bool confirm = _dialogs.ShowConfirmation(
+            $"Delete task „{vm.Title}”?");
+
+            if (!confirm)
+                return;
+
             if (_currentTasks.Contains(vm))
             {
                 _currentTasks.Remove(vm);
@@ -109,11 +115,17 @@ namespace PMS.Views.ViewModels
         private void Tasks_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.NewItems != null)
-                foreach (TaskItemViewModel t in e.NewItems) t.PropertyChanged += Task_PropertyChanged;
-
+                foreach (TaskItemViewModel t in e.NewItems)
+                {
+                    t.PropertyChanged += Task_PropertyChanged;
+                    t.DeleteRequested += Task_DeleteRequested;
+                }
             if (e.OldItems != null)
-                foreach (TaskItemViewModel t in e.OldItems) t.PropertyChanged -= Task_PropertyChanged;
-
+                foreach (TaskItemViewModel t in e.OldItems)
+                {
+                    t.PropertyChanged -= Task_PropertyChanged;
+                    t.DeleteRequested -= Task_DeleteRequested;
+                }
             if (Project != null) _repo.Save(Project.Model);
         }
 

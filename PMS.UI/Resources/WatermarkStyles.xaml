@@ -9,7 +9,6 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TextBox">
-                    <!-- Dodaj Border -->
                     <Border 
                         x:Name="Bd"
                         Background="{TemplateBinding Background}"
@@ -38,7 +37,6 @@
                         </Trigger>
                         <Trigger Property="IsKeyboardFocused" Value="True">
                             <Setter TargetName="Watermark" Property="Visibility" Value="Collapsed"/>
-                            <!-- opcjonalnie: efekt focusu na Border -->
                             <Setter TargetName="Bd" Property="BorderBrush" Value="#FF568FE1"/>
                         </Trigger>
                     </ControlTemplate.Triggers>

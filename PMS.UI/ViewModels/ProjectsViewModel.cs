@@ -55,6 +55,12 @@ namespace PMS.Views.ViewModels
         {
             if (SelectedProject == null) return;
 
+            bool confirm = _dialogs.ShowConfirmation(
+            $"Delete project „{_selectedProject.Name}”?");
+
+            if (!confirm)
+                return;
+
             _repo.Delete(SelectedProject.Model.Name);
             Projects.Remove(SelectedProject);
             SelectedProject = Projects.FirstOrDefault();

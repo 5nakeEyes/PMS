@@ -10,9 +10,11 @@
                 <ResourceDictionary Source="/Resources/IconButtonStyle.xaml"/>
                 <ResourceDictionary Source="/Resources/ListBoxItemStyle.xaml"/>
                 <ResourceDictionary Source="/Resources/ListBoxStyle.xaml"/>
+                <ResourceDictionary Source="/Resources/SecondIconButtonStyle.xaml"/>
                 <ResourceDictionary Source="/Resources/SecondRoundedBorderStyle.xaml"/>
                 <ResourceDictionary Source="/Resources/TextBlockStyle.xaml"/>
                 <ResourceDictionary Source="/Resources/TextBoxStyle.xaml"/>
+                <ResourceDictionary Source="/Resources/ThirdRoundedBorderStyle.xaml"/>
                 <ResourceDictionary Source="Resources/WatermarkStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

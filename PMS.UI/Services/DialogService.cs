@@ -47,5 +47,17 @@ namespace PMS.Views.Services
             taskModel = default!;
             return false;
         }
+
+        public bool ShowConfirmation(string message)
+        {
+            var vm = new ConfirmationDialogViewModel(message);
+            var view = new ConfirmationDialog
+            {
+                DataContext = vm,
+                Owner = Application.Current.MainWindow
+            };
+            return view.ShowDialog() == true;
+        }
+
     }
 }

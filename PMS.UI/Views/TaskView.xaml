@@ -31,15 +31,15 @@
                  Text="{Binding Title}"
                  HorizontalAlignment="Left"
                  MinWidth="100"
-                 FontWeight="SemiBold"/>
+                 FontWeight="SemiBold"
+                 ToolTip="{Binding Title}"/>
 
             <!-- Termin zakończenia -->
             <TextBlock Grid.Column="1"
                  Text="{Binding Deadline, StringFormat={}{0:dd/MM/yyyy}}"
                  Margin="5,0"
                  MinWidth="60"
-                 HorizontalAlignment="Center"
-                 ToolTip="Termin zakończenia"/>
+                 HorizontalAlignment="Center"/>
 
             <!-- Status -->
             <ComboBox Grid.Column="2"

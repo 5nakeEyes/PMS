@@ -8,6 +8,7 @@ namespace PMS.Views.Services
         bool TryAddProject(out string name, out DateTime deadline);
         bool TryEditProject(ProjectItemViewModel vm, out string newName, out DateTime newDeadline);
         bool TryAddTask(out TaskModel taskModel);
+        bool ShowConfirmation(string message);
     }
 
 }

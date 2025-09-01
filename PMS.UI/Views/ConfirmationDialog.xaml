@@ -1,0 +1,67 @@
+﻿<Window x:Class="PMS.UI.Views.ConfirmationDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Confirmation"
+        Width="360" Height="180"
+        WindowStartupLocation="CenterOwner"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        ResizeMode="NoResize"
+        Background="Transparent">
+
+    <Border CornerRadius="8"
+          Background="White"
+          BorderBrush="#CCCCCC"
+          BorderThickness="1">
+        <Grid>
+            <Grid.RowDefinitions>
+                <!-- Pasek tytułu -->
+                <RowDefinition Height="40"/>
+                <!-- Treść komunikatu -->
+                <RowDefinition Height="*"/>
+                <!-- Przycisków -->
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Customowy pasek tytułu -->
+            <Border Grid.Row="0"
+              Style="{StaticResource ThirdRoundedBorderStyle}"
+              CornerRadius="8,8,0,0">
+                <TextBlock Text="Confirmation"
+                   Foreground="White"
+                   FontSize="16"
+                   FontWeight="SemiBold"
+                   VerticalAlignment="Center"
+                   Margin="12,0"/>
+            </Border>
+
+            <!-- Komunikat wyśrodkowany -->
+            <TextBlock Grid.Row="1"
+                 Text="{Binding Message}"
+                 FontSize="18"
+                 FontWeight="Bold"
+                 TextWrapping="Wrap"
+                 HorizontalAlignment="Center"
+                 VerticalAlignment="Center"
+                 Margin="16"/>
+
+            <!-- Przycisk Tak / Nie w prawym dolnym rogu -->
+            <StackPanel Grid.Row="2"
+                  Orientation="Horizontal"
+                  HorizontalAlignment="Right"
+                  Margin="0,12,12,12">
+                
+                <Button Content="Yes"
+                Command="{Binding YesCommand}"
+                Width="80"
+                Margin="0,0,8,0"
+                Style="{StaticResource SecondIconButtonStyle}"/>
+                
+                <Button Content="No"
+                Command="{Binding NoCommand}"
+                Width="80"
+                Style="{StaticResource IconButtonStyle}"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>
