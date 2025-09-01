@@ -7,13 +7,13 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Border Style="{StaticResource SecondRoundedBorderStyle}" Padding="4" Margin="0,5,0,0">
-        <Grid Grid.Row="3" >
+        <Grid>
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width=".5*"/>
                 <ColumnDefinition Width=".5*"/>
                 <ColumnDefinition Width=".5*"/>
-                <ColumnDefinition Width=".5*"/>
-                <ColumnDefinition Width=".5*"/>
+                <ColumnDefinition Width=".6*"/>
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Column="0" Text="Title"     FontWeight="Bold" HorizontalAlignment="Left"   Margin="10,0,10,0" Style="{StaticResource LightTextBlockStyle}"/>

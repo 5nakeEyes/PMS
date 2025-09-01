@@ -6,9 +6,9 @@
     xmlns:local="clr-namespace:PMS.UI.Converters"
     Title="Project Manager Software (PMS)"
     Height="500"
-    Width="800"
+    Width="900"
     MinHeight="500"
-    MinWidth="800"
+    MinWidth="900"
     WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
@@ -17,8 +17,8 @@
 
     <Grid Margin="5">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width=".25*"/>
-            <ColumnDefinition Width=".75*"/>
+            <ColumnDefinition Width=".2*"/>
+            <ColumnDefinition Width=".8*"/>
         </Grid.ColumnDefinitions>
 
         <Border Grid.Column="0" >

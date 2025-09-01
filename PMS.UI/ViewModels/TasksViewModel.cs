@@ -58,7 +58,7 @@ namespace PMS.Views.ViewModels
             _dialogs = dialogs;
 
             SortOptions = new ReadOnlyObservableCollection<string>(new ObservableCollection<string>(_sortOptions));
-            _selectedSortOption = SortOptions.FirstOrDefault() ?? _sortOptions[0];
+            _selectedSortOption = _sortOptions[4];
 
             _tasksCvs.Filter += TaskFilter;
             ClearSearchCommand = new RelayCommand(_ => SearchText = string.Empty);
@@ -152,13 +152,13 @@ namespace PMS.Views.ViewModels
             view.SortDescriptions.Clear();
             switch (SelectedSortOption)
             {
-                case "Tytuł A-Z":
+                case "Title A-Z":
                     view.SortDescriptions.Add(new SortDescription(nameof(TaskItemViewModel.Title), ListSortDirection.Ascending)); break;
-                case "Tytuł Z-A":
+                case "Title Z-A":
                     view.SortDescriptions.Add(new SortDescription(nameof(TaskItemViewModel.Title), ListSortDirection.Descending)); break;
-                case "Priorytet ↑":
+                case "Priority ↑":
                     view.SortDescriptions.Add(new SortDescription(nameof(TaskItemViewModel.Priority), ListSortDirection.Ascending)); break;
-                case "Priorytet ↓":
+                case "Priority ↓":
                     view.SortDescriptions.Add(new SortDescription(nameof(TaskItemViewModel.Priority), ListSortDirection.Descending)); break;
                 case "Deadline":
                     view.SortDescriptions.Add(new SortDescription(nameof(TaskItemViewModel.Deadline), ListSortDirection.Ascending)); break;

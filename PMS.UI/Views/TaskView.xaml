@@ -15,7 +15,7 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <!-- Tytuł -->
-                <ColumnDefinition Width=".5*"/>
+                <ColumnDefinition Width="1*"/>
                 <!-- Deadline -->
                 <ColumnDefinition Width=".5*"/>
                 <!-- Status -->
@@ -23,7 +23,7 @@
                 <!-- Priorytet -->
                 <ColumnDefinition Width=".5*"/>
                 <!-- Akcje -->
-                <ColumnDefinition Width=".5*"/>
+                <ColumnDefinition Width=".6*"/>
             </Grid.ColumnDefinitions>
 
             <!-- Tytuł zadania -->

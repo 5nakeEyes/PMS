@@ -6,10 +6,23 @@
             CornerRadius="4"
             Margin="0,5,0,0"
             Style="{StaticResource FirstRoundedBorderStyle}">
-        <StackPanel>
-            <views:TaskControlsView/>
-            <views:TaskListHeaderView/>
-            <views:TaskListView/>
-        </StackPanel>
+        
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid Row="0">
+                <views:TaskControlsView/>
+                
+                </Grid>
+                <Grid Row="1">
+                <views:TaskListHeaderView/>
+                </Grid>
+                <Grid Row="2">
+                    <views:TaskListView/>
+                </Grid>
+            </Grid>
     </Border>
 </UserControl>

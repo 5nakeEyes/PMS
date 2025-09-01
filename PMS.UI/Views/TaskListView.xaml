@@ -6,13 +6,13 @@
              xmlns:views="clr-namespace:PMS.UI.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <ScrollViewer Grid.Row="4" Margin="0,5,0,0" VerticalScrollBarVisibility="Auto">
+    <ScrollViewer Margin="0,5,0,0" VerticalScrollBarVisibility="Auto" CanContentScroll="True">
         <ItemsControl ItemsSource="{Binding TaskList.TasksView}">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <views:TaskView/>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <views:TaskView/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
         </ItemsControl>
     </ScrollViewer>
 </UserControl>
