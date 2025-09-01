@@ -10,7 +10,7 @@ namespace PMS.Views.Services
         public bool TryAddProject(out string name, out DateTime deadline)
         {
             var vm = new AddProjectViewModel();
-            var dlg = new AddProjectWindow { Owner = Application.Current.MainWindow, DataContext = vm };
+            var dlg = new AddProjectWindow { Owner = Application.Current.MainWindow, DataContext = vm, Title="Add project" };
             if (dlg.ShowDialog() == true)
             {
                 name = vm.Name?.Trim();
@@ -24,7 +24,7 @@ namespace PMS.Views.Services
         public bool TryEditProject(ProjectItemViewModel pvm, out string newName, out DateTime newDeadline)
         {
             var vm = new AddProjectViewModel { Name = pvm.Name, Deadline = pvm.Deadline };
-            var dlg = new AddProjectWindow { Owner = Application.Current.MainWindow, DataContext = vm };
+            var dlg = new AddProjectWindow { Owner = Application.Current.MainWindow, DataContext = vm, Title = "Edit project" };
             if (dlg.ShowDialog() == true)
             {
                 newName = vm.Name!.Trim();
@@ -38,7 +38,7 @@ namespace PMS.Views.Services
         public bool TryAddTask(out TaskModel taskModel)
         {
             var vm = new AddTaskViewModel();
-            var dlg = new AddTaskWindow { Owner = Application.Current.MainWindow, DataContext = vm };
+            var dlg = new AddTaskWindow { Owner = Application.Current.MainWindow, DataContext = vm, Title = "Add task" };
             if (dlg.ShowDialog() == true)
             {
                 taskModel = vm.ToTaskModel();

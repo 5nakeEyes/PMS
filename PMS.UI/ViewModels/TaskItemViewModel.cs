@@ -86,10 +86,10 @@ namespace PMS.UI.ViewModels
                 DeleteRequested?.Invoke(this);
             });
 
-            EditCommand = new RelayCommand(_ => OnEdit());
+            EditCommand = new RelayCommand(_ => EditTask());
         }
 
-        private void OnEdit()
+        private void EditTask()
         {
             var editVm = new AddTaskViewModel
             {
@@ -103,7 +103,8 @@ namespace PMS.UI.ViewModels
             var window = new AddTaskWindow
             {
                 Owner = Application.Current.MainWindow,
-                DataContext = editVm
+                DataContext = editVm,
+                Title = "Edit task"
             };
 
             if (window.ShowDialog() == true)
