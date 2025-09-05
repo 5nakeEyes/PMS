@@ -58,7 +58,8 @@
                 SelectedItem="{Binding Priority}"
                 MinWidth="80"
                 HorizontalAlignment="Center"
-                Margin="5,0"/>
+                Margin="5,0"
+                Style="{StaticResource ComboBoxPriorityBadge}"/>
 
             <!-- Przycisk Edytuj / Usuń -->
             <StackPanel Grid.Column="4"

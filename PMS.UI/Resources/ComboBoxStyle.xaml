@@ -47,4 +47,84 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style TargetType="ComboBox" x:Key="ComboBoxPriorityBadge">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="6"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+
+        <!-- 1. Ustaw biały Foreground dla wszystkich ComboBoxItem -->
+        <Setter Property="ItemContainerStyle">
+            <Setter.Value>
+                <Style TargetType="ComboBoxItem">
+                    <Setter Property="Foreground"
+                Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ComboBox}}"/>
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsHighlighted" Value="True">
+                            <Setter Property="Background" Value="#555"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Setter.Value>
+        </Setter>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBox">
+                    <Grid>
+                        <Border x:Name="ToggleButtonBorder"
+                  Background="{TemplateBinding Background}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}"
+                  CornerRadius="6">
+                            <ToggleButton x:Name="ToggleButton"
+                          Background="Transparent"
+                          BorderThickness="0"
+                          Foreground="{TemplateBinding Foreground}"
+                          Content="{TemplateBinding SelectionBoxItem}"
+                          IsChecked="{Binding IsDropDownOpen,
+                                      Mode=TwoWay,
+                                      RelativeSource={RelativeSource TemplatedParent}}"/>
+                        </Border>
+
+                        <Popup x:Name="Popup"
+                 IsOpen="{TemplateBinding IsDropDownOpen}"
+                 Placement="Bottom"
+                 AllowsTransparency="True"
+                 Focusable="False"
+                 PopupAnimation="Slide"
+                 Width="{Binding ActualWidth,
+                                 RelativeSource={RelativeSource AncestorType=ComboBox}}">
+                            <Border Background="{StaticResource BorderBrush}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="6">
+                                <ScrollViewer>
+                                    <ItemsPresenter/>
+                                </ScrollViewer>
+                            </Border>
+                        </Popup>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Priority}" Value="High">
+                <Setter Property="Background" Value="#E53935"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Priority}" Value="Medium">
+                <Setter Property="Background" Value="{StaticResource SecondBrush}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Priority}" Value="Low">
+                <Setter Property="Background" Value="#43A047"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
 </ResourceDictionary>
