@@ -13,6 +13,7 @@ namespace PMS.UI.ViewModels
 
         public ICommand DeleteCommand { get; }
         public ICommand EditCommand { get; }
+        public ICommand ShowPreviewCommand { get; }
 
         public event Action<TaskItemViewModel> DeleteRequested;
 
@@ -87,6 +88,8 @@ namespace PMS.UI.ViewModels
             });
 
             EditCommand = new RelayCommand(_ => EditTask());
+
+            ShowPreviewCommand = new RelayCommand(_ => ShowTaskPreview());
         }
 
         private void EditTask()
@@ -100,7 +103,7 @@ namespace PMS.UI.ViewModels
                 Priority = this.Priority
             };
 
-            var window = new AddTaskWindow
+            var window = new AddTaskDialog
             {
                 Owner = Application.Current.MainWindow,
                 DataContext = editVm,
@@ -115,6 +118,19 @@ namespace PMS.UI.ViewModels
                 State = editVm.State;
                 Priority = editVm.Priority;
             }
+        }
+
+        private void ShowTaskPreview()
+        {
+            var previewVm = new PreviewTaskViewModel(_model);
+
+            var window = new PreviewTaskDialog
+            {
+                Owner = Application.Current.MainWindow,
+                DataContext = previewVm,
+                Title = "Preview task"
+            };
+            window.ShowDialog();
         }
     }
 }

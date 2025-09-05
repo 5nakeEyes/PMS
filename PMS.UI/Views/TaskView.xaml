@@ -6,12 +6,15 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     mc:Ignorable="d">
 
-
     <Border BorderThickness="1"
           CornerRadius="4"
           Padding="8"
           Margin="4"
           Style="{StaticResource FirstRoundedBorderStyle}">
+        <Border.InputBindings>
+            <MouseBinding Gesture="LeftClick"
+                Command="{Binding ShowPreviewCommand}" />
+        </Border.InputBindings>
         <Grid>
             <Grid.ColumnDefinitions>
                 <!-- Tytuł -->

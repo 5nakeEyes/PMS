@@ -1,11 +1,10 @@
-﻿using PMS.UI.ViewModels;
-using System.Windows;
+﻿using System.Windows;
 
 namespace PMS.UI.Views
 {
-    public partial class AddTaskWindow : Window
+    public partial class AddTaskDialog : Window
     {
-        public AddTaskWindow()
+        public AddTaskDialog()
         {
             InitializeComponent();
         }

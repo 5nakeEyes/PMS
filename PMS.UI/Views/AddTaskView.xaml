@@ -29,6 +29,7 @@
         Text="{Binding Description,
                UpdateSourceTrigger=PropertyChanged}"
         AcceptsReturn="True"
+        TextWrapping="Wrap"
         Height="60"
         Margin="0,2,0,0"/>
     </StackPanel>

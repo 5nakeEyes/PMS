@@ -44,8 +44,8 @@ namespace PMS.UI
 
             // ---- Widoki ----
             services.AddSingleton<MainWindow>();
-            services.AddTransient<AddTaskWindow>();
-            services.AddTransient<AddProjectWindow>();
+            services.AddTransient<AddTaskDialog>();
+            services.AddTransient<AddProjectDialog>();
         }
     }
 }

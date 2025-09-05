@@ -2,9 +2,9 @@
 
 namespace PMS.UI.Views
 {
-    public partial class AddProjectWindow : Window
+    public partial class AddProjectDialog : Window
     {
-        public AddProjectWindow()
+        public AddProjectDialog()
         {
             InitializeComponent();
         }

@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="PMS.UI.Views.PreviewTaskView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Height="Auto" Width="Auto">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Tytuł zadania -->
+        <StackPanel Grid.Row="0">
+            <TextBlock Text="{Binding Title, StringFormat=Title: {0}}"
+            Margin="0,2,0,0"/>
+        </StackPanel>
+
+        <!-- Opis zadania -->
+        <StackPanel Grid.Row="1" Margin="0,10,10,0">
+            <TextBlock Text="{Binding Description, StringFormat=Description: &#x0A;{0}}"
+            Height="auto"
+            HorizontalAlignment="Left"
+            TextWrapping="Wrap"
+            Margin="0,2,0,0"/>
+        </StackPanel>
+
+        <!-- Termin zakończenia -->
+        <StackPanel Grid.Row="2" Margin="0,10,0,0">
+            <TextBlock Text="{Binding Deadline, StringFormat={}Deadline: {0:dd/MM/yyyy}}"
+        Margin="0,2,0,0"/>
+        </StackPanel>
+
+        <!-- Status zadania -->
+        <StackPanel Grid.Row="3" Margin="0,10,0,0">
+            <TextBlock Text="{Binding State, StringFormat=State: {0}}"
+            Margin="0,2,0,0"/>
+        </StackPanel>
+
+        <!-- Priorytet zadania -->
+        <StackPanel Grid.Row="4" Margin="0,10,0,0">
+            <TextBlock Text="{Binding Priority, StringFormat=Priority: {0}}"
+            Margin="0,2,0,0"/>
+        </StackPanel>
+
+    </Grid>
+</UserControl>
